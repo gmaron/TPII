@@ -73,10 +73,14 @@ res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"",success
             var dBnombre = content[0].nombre;
             var dBapellido = content[0].apellido;
             var dBdni = content[0].dni;
-            var dBFecha = fechaHoy();
-
-            res.render(appDir+"/perfilUsuario.ejs", {userName:dBnombre,userSurname:dBapellido,userDNI:dBdni,
-                                             userEmail:dBemail });
+            var dBtemp = content[0].temp;
+            var dBluz = content[0].luz;
+            res.render(appDir+"/perfilUsuario.ejs", {userName:dBnombre,
+                                                     userSurname:dBapellido,
+                                                     userDNI:dBdni,
+                                                     userEmail:dBemail,
+                                                     userTemp: dBtemp,
+                                                     userLuz: dBluz});
         }else{
             res.render(appDir+'/inicio.ejs',{errorMessage:"Usuario/Contrasena invalida",
                                              errorMessageRegister:"",
