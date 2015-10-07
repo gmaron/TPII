@@ -84,22 +84,22 @@
                     <div >
                         <label for="temp">Temperatura (°C)</label>
                         <input name ="temp" type="range" min="18" max="30" value="18" step="1" onchange="showValue(this.value)" />
-                            <span id="range">18</span>
+                            <span id="rangeTemp">18</span>
                             <script type="text/javascript">
                             function showValue(newValue)
                             {
-                                document.getElementById("range").innerHTML=newValue;
+                                document.getElementById("rangeTemp").innerHTML=newValue;
                             }
                             </script>
                     </div>
                     <div>
                         <label for="luz">Iluminacion (%)</label>
                         <input name ="luz" type="range" min="0" max="100" value="50" step="5" onchange="showValue(this.value)" />
-                            <span id="range">50</span>
+                            <span id="rangeLuz">50</span>
                             <script type="text/javascript">
                             function showValue(newValue)
                             {
-                                document.getElementById("range").innerHTML=newValue;
+                                document.getElementById("rangeLuz").innerHTML=newValue;
                             }
                             </script>
                     </div>
