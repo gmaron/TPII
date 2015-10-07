@@ -52,7 +52,7 @@ var appDirImg = appDir+"/img";
                 saveUserDataBase(regNombre,regApellido,regDNI,regEmail,regPass,regTemp,regLuz);
                 console.log("arriba del guardar email");
                 sendEmail(regEmail,regNombre,regPass);
-                res.render(appDir+'/inicio.ejs',{successMessageRegister:"Verifique su casilla para obtener la contrasena"});
+res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"",successMessageRegister:"Verifique su casilla para obtener la contrasena"}); 
             }
           }
       });  
@@ -78,7 +78,10 @@ var appDirImg = appDir+"/img";
             res.render(appDir+"/perfilUsuario.ejs", {userName:dBnombre,userSurname:dBapellido,userDNI:dBdni,
                                              userEmail:dBemail });
         }else{
-            res.render(appDir+'/inicio.ejs',{errorMessage:"Usuario/contrasena invalida"});        }
+            res.render(appDir+'/inicio.ejs',{errorMessage:"Usuario/Contrasena invalida",
+                                             errorMessageRegister:"",
+                                             successMessageRegister:""});
+        }
     }
   });
     //res.render(appDir+'/perfilUsuario.ejs',{title:"homepage"});
@@ -102,7 +105,10 @@ var appDirImg = appDir+"/img";
 
 /*---------------------------Variables y funciones para la Base de Datos--------------*/
 
+<<<<<<< Updated upstream
 //var ipDataBase = '192.168.188.128'; // ip de la base de datos
+=======
+>>>>>>> Stashed changes
 var ipDataBase = '192.168.0.13'; // ip de la base de datos
 var usrDataBase = 'milton';           // nombre de usuario
 var passDataBase = 'milton';        // contrasena
