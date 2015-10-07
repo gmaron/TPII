@@ -16,27 +16,46 @@ var appDir = path.dirname(require.main.filename);
 
  app.set('view options', { layout: false });
  app.set('view engine', 'ejs');
+
 /* serves main page */
  app.get("/", function(req, res) {
-    res.render(appDir+'/index.ejs',{errorMessage:""});
+    res.render(appDir+'/index.ejs',{errorMessage:"algo",errorMessageRegister:"",successMessageRegister:""});
  });
  
 
-  app.post("/registro",function(req,res){
+    app.post("/registro",function(req,res){
       console.log("Entre al post del registro");
       var regEmail = req.body.email;
       recoveryUserByEmail(regEmail,function (err,content){
-            var regNombre = req.body.nombre;
-            var regApellido = req.body.apellido;
-            var regEmail = req.body.email;
-            var regDNI = req.body.dni;
-            var regTemp = req.body.temp;
-            var regLuz = req.body.luz;
-            
-      });
-
-      
-  });
+          console.log("Voy a busca usuarios");
+          if(err){
+              console.log (err);
+          }else{
+            console.log(content);
+            if (content !== null){
+                console.log("Usuario ya registrado");
+                res.render(appDir+'/index.ejs',{errorMessage:"",errorMessageRegister:"Usuario ya registrado",successMessageRegister:""});        
+            }else{
+                console.log("arriba del guardar");
+                var regNombre = req.body.nombre;
+                var regApellido = req.body.apellido;
+                var regEmail = req.body.email;
+                var regDNI = req.body.dni;
+                var regPass = passwordRandom();
+                var regTemp = req.body.temp;
+                var regLuz = req.body.luz;
+                
+                
+                
+                console.log("arriba del guardar");
+                saveUserDataBase(regNombre,regApellido,regDNI,regEmail,regPass,regTemp,regLuz);
+                console.log("arriba del guardar email");
+                sendEmail(regEmail,regNombre,regPass);
+                res.render(appDir+'/index.ejs',{successMessageRegister:"Verifique su casilla para obtener la contrasena"});
+            }
+          }
+      });  
+    });
 
 
   app.post("/log", function(req, res) { 
@@ -105,7 +124,7 @@ function saveUserDataBase(nombre,apellido,dni,email,pass,temp,luz){
     });
     connection.connect();
     
-    var valuesInsert = {nombre: nombre, apellido: apellido, dni: dni, email: email, password: pass};
+    var valuesInsert = {nombre: nombre, apellido: apellido, dni: dni, email: email, password: pass, temp:temp, luz:luz};
     var query = connection.query('INSERT INTO usuario SET ?', valuesInsert, function(err, result) {
         // Neat!
     });
@@ -248,6 +267,36 @@ function saveAuditoriaDataBase (email){
 
     connection.end();
     
-    
-    
 }
+
+/*---------------------------Variables y funciones para manipular Emails--------------*/
+
+var email   = require("emailjs");
+var serverEmail  = email.server.connect({
+   user:    "ppsgalileo@gmail.com", 
+   password:"ingenieriaencomputacion", 
+   host:    "smtp.gmail.com", 
+   ssl:     true
+});
+
+/*
+*   function: sendEmail ()
+*       ---> envia un mail con texto plano al usuario con su respectiva contrasena
+*   Parametros:
+*       ---> email: direccion para enviar el mail. Formato: direccion@servidor.com
+*       ---> nombre: nombre del destinario
+*       ---> pass: contrasena para el destinatario
+*/
+function sendEmail(email,nombre,pass){
+    
+    // send the message and get a callback with an error or details of the message that was sent
+    serverEmail.send({
+       text:    "Sr/a. "+nombre+" \n \nSu clave de acceso es: "+pass+"\n \nSaludos,\n \nGalileo", 
+       from:    "Galileo <ppsgalileo@gmail.com>", 
+       to:      nombre+" "+email,
+       //cc:      "else <else@your-email.com>",
+       subject: "Clave de acceso - Galileo"
+    }, function(err, message) { if (err!=null) console.log(err); });
+
+}
+
