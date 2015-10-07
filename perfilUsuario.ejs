@@ -64,7 +64,7 @@
                       <tr>
                         <td>Temperatura seleccionada:</td>
                         <td>
-                         <input name ="temp" type="rangeTemp" min="18" max="30" value="18" step="1" onchange="showValue(this.value)" />
+                         <input name ="temp" type="range" min="18" max="30" value="18" step="1" onchange="showValue(this.value)" />
                             <span id="rangeTemp"><%= userTemp %></span>
                             <script type="text/javascript">
                             function showValue(newValue)
@@ -77,7 +77,7 @@
                       <tr>
                         <td>Intensidad de luz:</td>
                         <td>
-                         <input name ="luz" type="rangeLuz" min="0" max="100" value="50" step="5" onchange="showValue(this.value)" />
+                         <input name ="luz" type="range" min="0" max="100" value="50" step="5" onchange="showValue(this.value)" />
                             <span id="rangeLuz"><%= userLuz %></span>
                             <script type="text/javascript">
                             function showValue(newValue)

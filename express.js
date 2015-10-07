@@ -109,10 +109,9 @@ res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"",success
 
 /*---------------------------Variables y funciones para la Base de Datos--------------*/
 
-<<<<<<< Updated upstream
+
 //var ipDataBase = '192.168.188.128'; // ip de la base de datos
-=======
->>>>>>> Stashed changes
+
 var ipDataBase = '192.168.0.13'; // ip de la base de datos
 var usrDataBase = 'milton';           // nombre de usuario
 var passDataBase = 'milton';        // contrasena
