@@ -62,9 +62,31 @@
                         <td><%= userDNI %></td>
                       </tr>                                       
                       <tr>
-                        <td>Email:</td>
-                        <td><a><%= userEmail %></a></td>
+                        <td>Temperatura seleccionada:</td>
+                        <td>
+                         <input name ="temp" type="range" min="18" max="30" value="18" step="1" onchange="showValue(this.value)" />
+                            <span id="range"><%= userTemp %></span>
+                            <script type="text/javascript">
+                            function showValue(newValue)
+                            {
+                                document.getElementById("range").innerHTML=newValue;
+                            }
+                            </script>
+                        </td>
                       </tr>                                           
+                      <tr>
+                        <td>Intensidad de luz:</td>
+                        <td>
+                         <input name ="luz" type="range" min="0" max="100" value="50" step="5" onchange="showValue(this.value)" />
+                            <span id="range"><%= userLuz %></span>
+                            <script type="text/javascript">
+                            function showValue(newValue)
+                            {
+                                document.getElementById("range").innerHTML=newValue;
+                            }
+                            </script>
+                        </td>                          
+                      </tr> 
                     </tbody>
                   </table>
             </div>
