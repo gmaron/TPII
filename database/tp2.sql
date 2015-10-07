@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 07, 2015 at 03:18 AM
+-- Generation Time: Oct 07, 2015 at 03:25 AM
 -- Server version: 5.5.43
 -- PHP Version: 5.4.39-0+deb7u2
 
@@ -26,6 +26,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `auditoria`
 --
 
+DROP TABLE IF EXISTS `auditoria`;
 CREATE TABLE IF NOT EXISTS `auditoria` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `fechaEntrada` varchar(255) NOT NULL,
@@ -40,6 +41,7 @@ CREATE TABLE IF NOT EXISTS `auditoria` (
 -- Table structure for table `galileo`
 --
 
+DROP TABLE IF EXISTS `galileo`;
 CREATE TABLE IF NOT EXISTS `galileo` (
   `nombre` varchar(10) NOT NULL,
   `apellido` varchar(10) NOT NULL,
@@ -60,6 +62,7 @@ INSERT INTO `galileo` (`nombre`, `apellido`, `id`) VALUES
 -- Table structure for table `usuario`
 --
 
+DROP TABLE IF EXISTS `usuario`;
 CREATE TABLE IF NOT EXISTS `usuario` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(255) NOT NULL,
