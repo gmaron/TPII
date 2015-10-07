@@ -15,6 +15,8 @@ var appDir = path.dirname(require.main.filename);
 var appDirImg = appDir+"/img";
 
 
+
+
  app.set('view options', { layout: false });
  app.set('view engine', 'ejs');
 
@@ -100,8 +102,9 @@ var appDirImg = appDir+"/img";
 
 /*---------------------------Variables y funciones para la Base de Datos--------------*/
 
-var ipDataBase = '192.168.188.128'; // ip de la base de datos
-var usrDataBase = 'root';           // nombre de usuario
+//var ipDataBase = '192.168.188.128'; // ip de la base de datos
+var ipDataBase = '192.168.0.13'; // ip de la base de datos
+var usrDataBase = 'milton';           // nombre de usuario
 var passDataBase = 'milton';        // contrasena
 var nameDataBase = 'tp2';           // nombre de la base de datos
 
@@ -115,11 +118,12 @@ var nameDataBase = 'tp2';           // nombre de la base de datos
 */
 function saveUserDataBase(nombre,apellido,dni,email,pass,temp,luz){
     var mysql      = require('mysql');
-    var connection = mysql.createConnection({
+    var connection = mysql.createConnection({      
       host     : ipDataBase,
-      user     : usrDataBase,
+      user     : usrDataBase,      
       password : passDataBase,
       database : nameDataBase
+        
     });
     connection.connect();
     
