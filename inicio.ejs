@@ -18,7 +18,7 @@
         body {        
             font-family: "Arial";
             font-size: 140%;
-            background-image: url("fondo.jpg");
+            background-image: url("img/fondo.jpg");
         }    
     </style>
     
@@ -33,7 +33,7 @@
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">              
       <ul class="nav navbar-nav navbar-right">        
-        <form class="navbar-form navbar-left" role="search">
+        <form class="navbar-form navbar-left" action="/log" method="post" role="search">
             <div class="form-group">
               <input type="text" class="form-control" id="email" name="email" placeholder="email@dominio.com">
             </div>
@@ -41,9 +41,9 @@
               <input type="password" class="form-control" id="pass" name="pass" placeholder="******************">
             </div>
             <button name="commandButton" type="submit" class="btn btn-default" value="LogIn" style="background:white;color:black">Entrar</button>
+            <label style="color:red"><%= errorMessage %></label> <!-- CHEQUEAR DONDE QUEDA EL MENSAJE DE ERROR -->
         </form>        
       </ul>
-     <label style="color:red"><%= errorMessage %></label> <!-- CHEQUEAR DONDE QUEDA EL MENSAJE DE ERROR -->
     </div>
   </div>
 </nav>
@@ -101,6 +101,8 @@
                     </div>
                     <div class="col-md-12">                        
                           <button name="commandButton" type="submit" class="btn btn-default" value="Registro" style="background:#0B0B61;color:white">Registrarse</button>
+                          <label style="color:red"><%= errorMessageRegister %></label>
+                          <label style="color:green"><%= successMessageRegister %></label>
                     </div>
                   </form>                                                                                  
                 </div> 

@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({
 
 var path = require('path');
 var appDir = path.dirname(require.main.filename);
+var appDirImg = appDir+"/img";
 
 
  app.set('view options', { layout: false });
@@ -19,7 +20,7 @@ var appDir = path.dirname(require.main.filename);
 
 /* serves main page */
  app.get("/", function(req, res) {
-    res.render(appDir+'/index.ejs',{errorMessage:"algo",errorMessageRegister:"",successMessageRegister:""});
+    res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"",successMessageRegister:""});
  });
  
 
@@ -34,7 +35,7 @@ var appDir = path.dirname(require.main.filename);
             console.log(content);
             if (content !== null){
                 console.log("Usuario ya registrado");
-                res.render(appDir+'/index.ejs',{errorMessage:"",errorMessageRegister:"Usuario ya registrado",successMessageRegister:""});        
+                res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"Usuario ya registrado",successMessageRegister:""});        
             }else{
                 console.log("arriba del guardar");
                 var regNombre = req.body.nombre;
@@ -44,14 +45,12 @@ var appDir = path.dirname(require.main.filename);
                 var regPass = passwordRandom();
                 var regTemp = req.body.temp;
                 var regLuz = req.body.luz;
-                
-                
-                
+            
                 console.log("arriba del guardar");
                 saveUserDataBase(regNombre,regApellido,regDNI,regEmail,regPass,regTemp,regLuz);
                 console.log("arriba del guardar email");
                 sendEmail(regEmail,regNombre,regPass);
-                res.render(appDir+'/index.ejs',{successMessageRegister:"Verifique su casilla para obtener la contrasena"});
+                res.render(appDir+'/inicio.ejs',{successMessageRegister:"Verifique su casilla para obtener la contrasena"});
             }
           }
       });  
@@ -74,13 +73,13 @@ var appDir = path.dirname(require.main.filename);
             var dBdni = content[0].dni;
             var dBFecha = fechaHoy();
 
-            res.render(appDir+"/login.ejs", {userName:dBnombre,userSurname:dBapellido,userDNI:dBdni,
-                                             userEmail:dBemail,fechaHoy:dBFecha });
+            res.render(appDir+"/perfilUsuario.ejs", {userName:dBnombre,userSurname:dBapellido,userDNI:dBdni,
+                                             userEmail:dBemail });
         }else{
-            res.render(appDir+'/index.ejs',{errorMessage:"Usuario/contrasena invalida"});        }
+            res.render(appDir+'/inicio.ejs',{errorMessage:"Usuario/contrasena invalida"});        }
     }
   });
-    //res.render(appDir+'/login.ejs',{title:"homepage"});
+    //res.render(appDir+'/perfilUsuario.ejs',{title:"homepage"});
     
   });
  

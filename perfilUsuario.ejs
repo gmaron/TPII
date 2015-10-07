@@ -13,7 +13,7 @@
         body {        
             font-family: "Arial";
             font-size: 140%;
-            background-image: url("fondo.jpg");
+            background-image: url("img/fondo.jpg");
         }    
     </style>
     
@@ -32,7 +32,6 @@
             <li><a href="#" style="color:white">Cerrar sesión</a></li>                      
         </ul>            
       </ul>
-     <label style="color:red"><%= errorMessage %></label> <!-- CHEQUEAR DONDE QUEDA EL MENSAJE DE ERROR -->
     </div>
   </div>
 </nav>
@@ -49,25 +48,25 @@
         <div class="row">                
             <div class=" col-md-9 col-lg-9 "> 
                   <table class="table table-user-information">
-                    <!--<tbody>
+                    <tbody>
                       <tr>
                         <td>Nombre:</td>
-                        <td></%= userName %></td>
+                        <td><%= userName %></td>
                       </tr>
                       <tr>
                         <td>Apellido:</td>
-                        <td></%= userSurname %></td>
+                        <td><%= userSurname %></td>
                       </tr>
                       <tr>
                         <td>DNI:</td>
-                        <td></%= userDNI %></td>
+                        <td><%= userDNI %></td>
                       </tr>                                       
                       <tr>
                         <td>Email:</td>
-                        <td><a></%= userEmail %></a></td>
+                        <td><a><%= userEmail %></a></td>
                       </tr>                                           
                     </tbody>
-                  </table> -->
+                  </table>
             </div>
         </div>
     </div>             
