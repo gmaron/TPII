@@ -1,0 +1,114 @@
+<html>
+<head>
+    
+    <title>Galileo</title>
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+            
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    
+    <style type="text/css">
+        body {        
+            font-family: "Arial";
+            font-size: 140%;
+            background-image: url("fondo.jpg");
+        }    
+    </style>
+    
+</head>
+<body>
+
+
+<nav class="navbar navbar-default" style="background:#0B0B61">
+  <div class="container-fluid">    
+    <div class="navbar-header" >
+        <a class="navbar-brand" style="color:white;">GALILEO</a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">              
+      <ul class="nav navbar-nav navbar-right">        
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+              <input type="text" class="form-control" id="email" name="email" placeholder="email@dominio.com">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" id="pass" name="pass" placeholder="******************">
+            </div>
+            <button name="commandButton" type="submit" class="btn btn-default" value="LogIn" style="background:white;color:black">Entrar</button>
+        </form>        
+      </ul>
+     <label style="color:red"><%= errorMessage %></label> <!-- CHEQUEAR DONDE QUEDA EL MENSAJE DE ERROR -->
+    </div>
+  </div>
+</nav>
+    
+<br>
+<br>    
+    
+<div class="container">    
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >      
+      <div class="panel panel-info">
+          <div class="panel-heading" style="background:#0B0B61;">
+            <h3 class="panel-title" style="text-align: center;color:white;">Registrarse</h3>
+          </div>
+          <div class="panel-body">
+              <div class="col-md-12">
+              <div class="row">   
+                  <form class="form-horizontal" role="form" name="form1" method="post" action="/registro" target="_self" data-toggle="validator">
+                    <div >
+                        <label for="nombre">Nombre</label>
+                        <input type="text" class="form-control" name="nom" placeholder="Juan" required="true">
+                    </div>
+                    <div>
+                        <label for="ape">Apellido</label>
+                        <input type="text" class="form-control" name="ape" placeholder="Lopez" required="true">
+                    </div>
+                     <div>
+                        <label for="dni">DNI</label>
+                        <input type="text" class="form-control" name="dni" pattern="^[0-9]{8,}" maxlength="8" placeholder="11111111" required="true"> 
+                    </div>
+                    <div>
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" placeholder="email@dominio.com">
+                    </div>
+                    <div >
+                        <label for="temp">Temperatura (°C)</label>
+                        <input name ="temp" type="range" min="18" max="30" value="18" step="1" onchange="showValue(this.value)" />
+                            <span id="range">18</span>
+                            <script type="text/javascript">
+                            function showValue(newValue)
+                            {
+                                document.getElementById("range").innerHTML=newValue;
+                            }
+                            </script>
+                    </div>
+                    <div>
+                        <label for="luz">Iluminacion (%)</label>
+                        <input name ="luz" type="range" min="0" max="100" value="50" step="5" onchange="showValue(this.value)" />
+                            <span id="range">50</span>
+                            <script type="text/javascript">
+                            function showValue(newValue)
+                            {
+                                document.getElementById("range").innerHTML=newValue;
+                            }
+                            </script>
+                    </div>
+                    <div class="col-md-12">                        
+                          <button name="commandButton" type="submit" class="btn btn-default" value="Registro" style="background:#0B0B61;color:white">Registrarse</button>
+                    </div>
+                  </form>                                                                                  
+                </div> 
+                </div>
+              </div>
+        </div>                          
+    </div>
+</div>
+
+</body>    
+</html>
