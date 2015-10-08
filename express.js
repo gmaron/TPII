@@ -47,10 +47,7 @@ var appDirImg = appDir+"/img";
                 var regPass = passwordRandom();
                 var regTemp = req.body.temp;
                 var regLuz = req.body.luz;
-            
-                console.log("arriba del guardar");
                 saveUserDataBase(regNombre,regApellido,regDNI,regEmail,regPass,regTemp,regLuz);
-                console.log("arriba del guardar email");
                 sendEmail(regEmail,regNombre,regPass);
 res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"",successMessageRegister:"Verifique su casilla para obtener la contrasena"}); 
             }
@@ -61,13 +58,10 @@ res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"",success
 
   app.post("/log", function(req, res) { 
     // some server side logic 
-    console.log("Entre por el post");
-    
     recoveryUser(req.body.email,req.body.pass,function (err,content){
     if (err){
         console.log(err);
     }else{
-        console.log("Contenido: "+content);
         if (content !== null){
             var dBemail = content[0].email;  
             var dBnombre = content[0].nombre;
@@ -111,7 +105,6 @@ res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"",success
 
 
 //var ipDataBase = '192.168.188.128'; // ip de la base de datos
-
 var ipDataBase = '192.168.0.13'; // ip de la base de datos
 var usrDataBase = 'milton';           // nombre de usuario
 var passDataBase = 'milton';        // contrasena
