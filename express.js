@@ -24,24 +24,19 @@ var appDirImg = appDir+"/img";
  app.get("/", function(req, res) {
     res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"",successMessageRegister:""});
  });
- 
 
-    app.post("/registro",function(req,res){
-      console.log("Entre al post del registro");
+app.post("/registro",function(req,res){
       var regEmail = req.body.email;
       recoveryUserByEmail(regEmail,function (err,content){
-          console.log("Voy a busca usuarios");
           if(err){
               console.log (err);
           }else{
             console.log(content);
             if (content !== null){
-                console.log("Usuario ya registrado");
                 res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"Usuario ya registrado",successMessageRegister:""});        
             }else{
-                console.log("arriba del guardar");
-                var regNombre = req.body.nombre;
-                var regApellido = req.body.apellido;
+                var regNombre = req.body.nom;
+                var regApellido = req.body.ape;
                 var regEmail = req.body.email;
                 var regDNI = req.body.dni;
                 var regPass = passwordRandom();
@@ -49,14 +44,15 @@ var appDirImg = appDir+"/img";
                 var regLuz = req.body.luz;
                 saveUserDataBase(regNombre,regApellido,regDNI,regEmail,regPass,regTemp,regLuz);
                 sendEmail(regEmail,regNombre,regPass);
-res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"",successMessageRegister:"Verifique su casilla para obtener la contrasena"}); 
+                res.render(appDir+'/inicio.ejs',{errorMessage:"",
+                                            errorMessageRegister:"",
+                                            successMessageRegister:"Verifique su casilla para obtener la contrasena"}); 
             }
           }
       });  
     });
 
-
-  app.post("/log", function(req, res) { 
+app.post("/log", function(req, res) { 
     // some server side logic 
     recoveryUser(req.body.email,req.body.pass,function (err,content){
     if (err){
@@ -69,23 +65,74 @@ res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"",success
             var dBdni = content[0].dni;
             var dBtemp = content[0].temp;
             var dBluz = content[0].luz;
+            var dBpass = content[0].password;
             res.render(appDir+"/perfilUsuario.ejs", {userName:dBnombre,
                                                      userSurname:dBapellido,
                                                      userDNI:dBdni,
                                                      userEmail:dBemail,
                                                      userTemp: dBtemp,
-                                                     userLuz: dBluz});
+                                                     userLuz: dBluz,
+                                                     userPass: dBpass,
+                                                     errorMessageEmail:""});
         }else{
             res.render(appDir+'/inicio.ejs',{errorMessage:"Usuario/Contrasena invalida",
                                              errorMessageRegister:"",
                                              successMessageRegister:""});
         }
     }
-  });
-    //res.render(appDir+'/perfilUsuario.ejs',{title:"homepage"});
-    
+    });    
   });
  
+app.post ("/modPerfil",function (req,res){
+      var regEmail = req.body.email;
+      var regNombre = req.body.nom;
+      var regApellido = req.body.ape;
+      var regEmail = req.body.email;
+      var regTemp = req.body.temp;
+      var regLuz = req.body.luz;
+      var regPass = req.body.pass;
+      console.log('nombre: '+regNombre);
+      recoveryUserByEmail(regEmail,function (err,content){
+          if(err){
+              console.log (err);
+          }else{
+                console.log('nombre: '+regNombre+' apellido: '+regApellido);
+                var dBid = content[0].id;
+                var dBDNI = content[0].dni;
+                var dBpass = content[0].password;                
+                //si el mail no esta en la base de datos o el mail es el mismo que ya tenia
+                if ((content === null)||(content[0].email === regEmail)){
+                    console.log('modifico perfil');
+                    updateUserDataBase(regNombre,regApellido,regEmail,regTemp,regLuz,dBid);
+                    console.log('2 ---- nombre: '+regNombre+' apellido: '+regApellido);
+                    res.render(appDir+"/perfilUsuario.ejs", {userName:regNombre,
+                                                         userSurname:regApellido,
+                                                         userDNI:dBDNI,
+                                                         userEmail:regEmail,
+                                                         userTemp: regTemp,
+                                                         userLuz: regLuz,
+                                                         userPass: dBpass,
+                                                         errorMessageEmail:""});
+                }else{
+                    var dBemail = content[0].email;  
+                    var dBnombre = content[0].nombre;
+                    var dBapellido = content[0].apellido;
+                    var dBdni = content[0].dni;
+                    var dBtemp = content[0].temp;
+                    var dBluz = content[0].luz;
+                    res.render(appDir+"/perfilUsuario.ejs", {userName:dBnombre,
+                                                         userSurname:dBapellido,
+                                                         userDNI:dBdni,
+                                                         userEmail:dBemail,
+                                                         userTemp: dBtemp,
+                                                         userLuz: dBluz,
+                                                         userPass: dBpass,
+                                                         errorMessageEmail:"El email ya se encuentra registrado"});                      
+                }  
+          }
+      });   
+});
+
  /* serves all the static files */
  app.get(/^(.+)$/, function(req, res){ 
      console.log('static file request : ' + req.params);
@@ -118,7 +165,7 @@ var nameDataBase = 'tp2';           // nombre de la base de datos
 *
 *
 */
-function saveUserDataBase(nombre,apellido,dni,email,pass,temp,luz){
+function saveUserDataBase(nombre,apellido,dni,email,temp,luz){
     var mysql      = require('mysql');
     var connection = mysql.createConnection({      
       host     : ipDataBase,
@@ -129,7 +176,7 @@ function saveUserDataBase(nombre,apellido,dni,email,pass,temp,luz){
     });
     connection.connect();
     
-    var valuesInsert = {nombre: nombre, apellido: apellido, dni: dni, email: email, password: pass, temp:temp, luz:luz};
+    var valuesInsert = {nombre: nombre, apellido: apellido, dni: dni, email: email, temp:temp, luz:luz};
     var query = connection.query('INSERT INTO usuario SET ?', valuesInsert, function(err, result) {
         // Neat!
     });
@@ -138,6 +185,29 @@ function saveUserDataBase(nombre,apellido,dni,email,pass,temp,luz){
 
 
 }
+
+
+function updateUserDataBase(nombre,apellido,email,temp,luz,id){
+      var mysql      = require('mysql');
+      var connection = mysql.createConnection({      
+      host     : ipDataBase,
+      user     : usrDataBase,      
+      password : passDataBase,
+      database : nameDataBase
+        
+    });
+    connection.connect();
+
+    var valuesUpdate = {nombre: nombre, apellido: apellido, email: email, temp:temp, luz:luz};
+    var querySentence = 'UPDATE usuario SET ? WHERE id='+id+'';
+    var query = connection.query(querySentence,valuesUpdate, function(err, result) {
+        if (err){
+            console.log(err);
+        }
+    });
+    connection.end();
+}
+
 
 /*
 *   function: recoveryUser()

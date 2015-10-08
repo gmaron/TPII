@@ -52,11 +52,12 @@
                     <tbody>
                       <tr>
                         <td>Nombre:</td>
-                        <td><input type="text" class="form-control" name="nom" placeholder="Juan" value=<%= userName %> required="true"></td>
+                        <td><input type="text" class="form-control" name="nom" placeholder="Juan" value="<%= userName %>" required="true"></td>
                       </tr>
                       <tr>
                         <td>Apellido:</td>
-                        <td><input type="text" class="form-control" name="ape" placeholder="Lopez" value=<%= userSurname %> required="true"></td>
+                        <td>
+<input type="text" class="form-control" name="ape" placeholder="Lopez" value="<%= userSurname %>" required="true">    </td>
                       </tr>
                       <tr>
                         <td>DNI:</td>
@@ -64,7 +65,10 @@
                       </tr> 
                       <tr>
                         <td>Email:</td>
-                        <td><input type="email" class="form-control" name="email" value=<%= userEmail %> placeholder="email@dominio.com"></td>
+                        <td><input type="email" class="form-control" name="email" value=<%= userEmail %> placeholder="email@dominio.com">
+                            <br>
+                            <label style="color:red"><%= errorMessageEmail %></label>
+                        </td>
                       </tr> 
                       <tr>
                         <td>Contraseña:</td>
