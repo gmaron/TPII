@@ -1,6 +1,6 @@
- var express = require("express");
- var app = express();
- var user = express();
+var express = require("express");
+var app = express();
+var user = express();
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -12,20 +12,20 @@ app.use(bodyParser.urlencoded({
 
 var path = require('path');
 var appDir = path.dirname(require.main.filename);
-var appDirImg = appDir+"/img";
+var appDirImg = appDir + "/img";
 
 
 
 
- app.set('view options', { layout: false });
- app.set('view engine', 'ejs');
+app.set('view options', { layout: false });
+app.set('view engine', 'ejs');
 
 /* serves main page */
- app.get("/", function(req, res) {
-    res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"",successMessageRegister:""});
- });
+app.get("/", function (req, res) {
+    res.render(appDir + '/inicio.ejs', {errorMessage: "", errorMessageRegister: "", successMessageRegister: ""});
+});
 
-app.post("/registro",function(req,res){
+app.post("/registro", function (req, res){
       var regEmail = req.body.email;
       recoveryUserByEmail(regEmail,function (err,content){
           if(err){
@@ -35,18 +35,30 @@ app.post("/registro",function(req,res){
             if (content !== null){
                 res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"Usuario ya registrado",successMessageRegister:""});        
             }else{
-                var regNombre = req.body.nom;
-                var regApellido = req.body.ape;
-                var regEmail = req.body.email;
-                var regDNI = req.body.dni;
-                var regPass = passwordRandom();
-                var regTemp = req.body.temp;
-                var regLuz = req.body.luz;
-                saveUserDataBase(regNombre,regApellido,regDNI,regEmail,regPass,regTemp,regLuz);
-                sendEmail(regEmail,regNombre,regPass);
-                res.render(appDir+'/inicio.ejs',{errorMessage:"",
-                                            errorMessageRegister:"",
-                                            successMessageRegister:"Verifique su casilla para obtener la contrasena"}); 
+                recoveryAllUsers(function (err,content){
+                    var passEncontrada = 0;
+                    while (passEncontrada === 0){
+                        var regPass = passwordRandom();
+                        for(var i = 0; i < content.length; i++)
+                        {
+                          if(content[i].password !== regPass)
+                          {
+                            passEncontrada = 1;
+                          }
+                        }
+                    }
+                    var regNombre = req.body.nom;
+                    var regApellido = req.body.ape;
+                    var regEmail = req.body.email;
+                    var regDNI = req.body.dni;
+                    var regTemp = req.body.temp;
+                    var regLuz = req.body.luz;
+                    saveUserDataBase(regNombre,regApellido,regDNI,regEmail,regPass,regTemp,regLuz);
+                    sendEmail(regEmail,regNombre,regPass);
+                    res.render(appDir+'/inicio.ejs',{errorMessage:"",
+                                                errorMessageRegister:"",
+                                                successMessageRegister:"Verifique su casilla para obtener la contrasena"}); 
+                });
             }
           }
       });  
@@ -133,6 +145,9 @@ app.post ("/modPerfil",function (req,res){
       });   
 });
 
+app.post("/cerrarSesion",function (req,res){
+        res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"",successMessageRegister:""});
+});
  /* serves all the static files */
  app.get(/^(.+)$/, function(req, res){ 
      console.log('static file request : ' + req.params);
@@ -151,9 +166,10 @@ app.post ("/modPerfil",function (req,res){
 /*---------------------------Variables y funciones para la Base de Datos--------------*/
 
 
-//var ipDataBase = '192.168.188.128'; // ip de la base de datos
-var ipDataBase = '192.168.0.13'; // ip de la base de datos
-var usrDataBase = 'milton';           // nombre de usuario
+var ipDataBase = '192.168.188.128'; // ip de la base de datos
+//var ipDataBase = '192.168.0.13'; // ip de la base de datos
+//var usrDataBase = 'milton';           // nombre de usuario
+var usrDataBase = 'root';           // nombre de usuario
 var passDataBase = 'milton';        // contrasena
 var nameDataBase = 'tp2';           // nombre de la base de datos
 
@@ -165,7 +181,7 @@ var nameDataBase = 'tp2';           // nombre de la base de datos
 *
 *
 */
-function saveUserDataBase(nombre,apellido,dni,email,temp,luz){
+function saveUserDataBase(nombre,apellido,dni,pass,email,temp,luz){
     var mysql      = require('mysql');
     var connection = mysql.createConnection({      
       host     : ipDataBase,
@@ -176,7 +192,7 @@ function saveUserDataBase(nombre,apellido,dni,email,temp,luz){
     });
     connection.connect();
     
-    var valuesInsert = {nombre: nombre, apellido: apellido, dni: dni, email: email, temp:temp, luz:luz};
+    var valuesInsert = {nombre: nombre, apellido: apellido, dni: dni, email: email, password: pass, temp:temp, luz:luz};
     var query = connection.query('INSERT INTO usuario SET ?', valuesInsert, function(err, result) {
         // Neat!
     });
@@ -209,6 +225,34 @@ function updateUserDataBase(nombre,apellido,email,temp,luz,id){
 }
 
 
+function recoveryAllUsers(callback){
+    
+    var mysql      = require('mysql');
+    var connection = mysql.createConnection({
+      host     : ipDataBase,
+      user     : usrDataBase,
+      password : passDataBase,
+      database : nameDataBase
+    });
+    connection.connect();
+
+    var query = 'SELECT * FROM usuario u';
+    
+    var resQuery = connection.query(query,function(err, rows, fields) {
+          if (!err){
+              if (rows.length > 0)
+                return callback(null, rows);
+              else
+                return callback (null,null)
+          }else{
+              return callback (err,null);
+          }
+        connection.end();
+    });
+
+    
+}
+
 /*
 *   function: recoveryUser()
 *       ---> genera la conexion y consulta si un usuario y su contrasena se encuentran
@@ -217,11 +261,10 @@ function updateUserDataBase(nombre,apellido,email,temp,luz,id){
 *       --> email: email del usuario
 *       --> pass: contrasena
 *   Retorno
-*       --> 1 si existe
-*       --> 0 si no existe
+*       --> fila con datos del usuario si existe
+*       --> null si no existe
 *
 */
-var pathname;
 
 
 function recoveryUser(email,pass,callback){
@@ -252,6 +295,20 @@ function recoveryUser(email,pass,callback){
     
 }
 
+
+/*
+*   function: recoveryUserByEmail()
+*       ---> genera la conexion y consulta si un usuario se encuentran
+*            en la base de datos     
+*   Parametros:       
+*       --> email: email del usuario
+*   Retorno
+*       --> fila con datos del usuario si existe
+*       --> null si no existe
+*
+*/
+
+
 function recoveryUserByEmail (email,callback){
     var mysql      = require('mysql');
     var connection = mysql.createConnection({
@@ -276,6 +333,32 @@ function recoveryUserByEmail (email,callback){
         connection.end();
     });
 }
+
+function recoveryUserByPass (pass,callback){
+    var mysql      = require('mysql');
+    var connection = mysql.createConnection({
+      host     : ipDataBase,
+      user     : usrDataBase,
+      password : passDataBase,
+      database : nameDataBase
+    });
+    connection.connect();
+
+    var query = 'SELECT * FROM usuario u WHERE u.password="'+pass+'"';
+    
+    var resQuery = connection.query(query,function(err, rows, fields) {
+          if (!err){
+              if (rows.length > 0)
+                return callback(null, rows);
+              else
+                return callback (null,null)
+          }else{
+              return callback (err,null);
+          }
+        connection.end();
+    });
+}
+
 
 function fechaHoy(){
     var hoy = new Date();
@@ -374,4 +457,96 @@ function sendEmail(email,nombre,pass){
     }, function(err, message) { if (err!=null) console.log(err); });
 
 }
+
+/*
+*
+*   getPassword()
+*       --> obtiene la contrasena ingresada por el usuario
+*   Parametros:
+*       --> passConEnter: es la contrasena leida desde el archivo con el
+*           formato -> 'contrasenaConNumero'Enter
+*   Retorno:
+*       --> pass: la contrsena ingresada por el usuario
+*/
+function getPassword(passConEnter){
+    var pass = '';
+    var i = 0;
+    var passSplit = passConEnter.split('');    
+    //por si el usuario solo apreto Enter o por las dudas
+    if (passSplit.length > 0){
+        //la E es de Enter
+        while (passSplit[i] !== 'E'){
+            if(parseInt(passSplit[i],10) >= 0 ){
+                pass += passSplit[i];
+                console.log('pass: '+pass);
+            }
+            i++;
+        }
+    }
+    return pass;
+}
+
+
+
+/*
+*
+*   Ejecucion del programa que lee los eventos del teclado
+*   Codigo fuente: teclado.c
+*   Ejecutable: teclado
+*   ----> Fijarse el parametro en el linux de la placa antes de correr el programa
+*/
+var exec = require('child_process').exec;
+var child;
+var evento = "/dev/input/event1";
+var ejecutarTeclas = "cd "+appDir+"; ./teclado "+evento;
+
+child = exec(ejecutarTeclas, function (error, stdout, stderr) {
+  console.log('stdout: ' + stdout);
+  console.log('stderr: ' + stderr);
+  if (error !== null) {
+    console.log('exec error: ' + error);
+  }
+});
+
+
+
+/*
+*
+*   Programa principal
+*       --> cada 1 segundo
+*       --> Lee el archivo teclas.txt
+*       --> Corrobora que el usuario haya apretado el Enter
+*           --> si lo apreto quiere decir que hay una nueva contrasena
+*           --> se fija si la contrasena pertenece a un usuario 
+*               --> si pertenece, reconoce al usuario
+*               --> sino, informa que el usuario no existe
+*/
+fs = require('fs');
+setInterval(function(){
+  fs.readFile(appDir+'/teclas.txt', 'utf8', function (err,data) {
+  if (err) {
+    return console.log(err);
+  }else{
+    if (data.search("Enter") > 0){
+        var pass = getPassword(data);
+        console.log('password: '+pass);
+        fs.writeFile(appDir+'/teclas.txt', '', function (err,data) {
+            if(err)
+                console.log(err);
+        });
+        recoveryUserByPass(pass,function(err,content){
+            if (err)
+                console.log(err);
+            else{
+                if (content !== null){
+                    console.log("Usuario: "+content[0].email);
+                }else{
+                    console.log("Usuario no encontrado");
+                }
+            }
+        });
+      }
+  }
+})},1000);
+
 
