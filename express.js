@@ -256,7 +256,7 @@ var nameDataBase = 'tp2';           // nombre de la base de datos
 *
 *
 */
-function saveUserDataBase(nombre,apellido,dni,pass,email,temp,luz){
+function saveUserDataBase(nombre,apellido,dni,email,pass,temp,luz){
     var mysql      = require('mysql');
     var connection = mysql.createConnection({      
       host     : ipDataBase,
@@ -266,7 +266,7 @@ function saveUserDataBase(nombre,apellido,dni,pass,email,temp,luz){
         
     });
     connection.connect();
-    
+    console.log(pass);
     var valuesInsert = {nombre: nombre, apellido: apellido, dni: dni, email: email, password: pass, temp:temp, luz:luz};
     var query = connection.query('INSERT INTO usuario SET ?', valuesInsert, function(err, result) {
         // Neat!
@@ -457,7 +457,7 @@ function passwordRandom()
     var text = "";
     var possible = "0123456789";
 
-    for( var i=0; i < 8; i++ )
+    for( var i=0; i < 4; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
