@@ -2,6 +2,7 @@
 <head>
     
     <title>Galileo</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
     
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -12,7 +13,6 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
             
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
     
     <style type="text/css">
         body {        
@@ -83,10 +83,10 @@
                     </div>
                     <div >
                         <label for="temp">Temperatura (°C)</label>
-                        <input name ="temp" type="range" min="18" max="30" value="18" step="1" onchange="showValue(this.value)" />
+                        <input name ="temp" type="range" min="18" max="30" value="18" step="1" onchange="showValueTemp(this.value)" />
                             <span id="rangeTemp">18</span>
                             <script type="text/javascript">
-                            function showValue(newValue)
+                            function showValueTemp(newValue)
                             {
                                 document.getElementById("rangeTemp").innerHTML=newValue;
                             }
@@ -94,10 +94,10 @@
                     </div>
                     <div>
                         <label for="luz">Iluminacion (%)</label>
-                        <input name ="luz" type="range" min="0" max="100" value="50" step="5" onchange="showValue(this.value)" />
+                        <input name ="luz" type="range" min="0" max="100" value="50" step="5" onchange="showValueLuz(this.value)" />
                             <span id="rangeLuz">50</span>
                             <script type="text/javascript">
-                            function showValue(newValue)
+                            function showValueLuz(newValue)
                             {
                                 document.getElementById("rangeLuz").innerHTML=newValue;
                             }

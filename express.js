@@ -95,20 +95,17 @@ app.post("/log", function(req, res) {
     });    
   });
  
-app.post ("/modPerfil",function (req,res){
+app.post("/modPerfil",function (req,res){
       var regEmail = req.body.email;
       var regNombre = req.body.nom;
       var regApellido = req.body.ape;
-      var regEmail = req.body.email;
       var regTemp = req.body.temp;
       var regLuz = req.body.luz;
       var regPass = req.body.pass;
-      console.log('nombre: '+regNombre);
       recoveryUserByEmail(regEmail,function (err,content){
           if(err){
               console.log (err);
           }else{
-                console.log('nombre: '+regNombre+' apellido: '+regApellido);
                 var dBid = content[0].id;
                 var dBDNI = content[0].dni;
                 var dBpass = content[0].password;                
@@ -116,7 +113,6 @@ app.post ("/modPerfil",function (req,res){
                 if ((content === null)||(content[0].email === regEmail)){
                     console.log('modifico perfil');
                     updateUserDataBase(regNombre,regApellido,regEmail,regTemp,regLuz,dBid);
-                    console.log('2 ---- nombre: '+regNombre+' apellido: '+regApellido);
                     res.render(appDir+"/perfilUsuario.ejs", {userName:regNombre,
                                                          userSurname:regApellido,
                                                          userDNI:dBDNI,
@@ -148,20 +144,17 @@ app.post ("/modPerfil",function (req,res){
 app.post("/cerrarSesion",function (req,res){
         res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"",successMessageRegister:""});
 });
+
  /* serves all the static files */
- app.get(/^(.+)$/, function(req, res){ 
+app.get(/^(.+)$/, function(req, res){ 
      console.log('static file request : ' + req.params);
      res.sendfile( __dirname + req.params[0]); 
  });
  
- var port = process.env.PORT || 5000;
- app.listen(port, function() {
+var port = process.env.PORT || 5000;
+app.listen(port, function() {
    console.log("Listening on " + port);
- });
-
-
-
-
+});
 
 /*---------------------------Variables y funciones para la Base de Datos--------------*/
 
@@ -198,7 +191,7 @@ function saveUserDataBase(nombre,apellido,dni,pass,email,temp,luz){
     });
 
     connection.end();
-
+    
 
 }
 
