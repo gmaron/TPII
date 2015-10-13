@@ -2,6 +2,9 @@
 <head>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
     
+    
+<!--    <script src="sorttable.js"></script>-->
+    
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
@@ -21,7 +24,21 @@
          a:hover {
           cursor:pointer;
          }
+        
+        table.sortable thead {
+            background-color:#eee;
+            color:#666666;
+            font-weight: bold;
+            cursor: default;
+            border: 1px solid green;
+            background-color: green;
+            
+            color: white;
+        }
     </style>
+    
+    
+    
     <link rel="shortcut icon" type="image/png" href="/img/favicon.png"/>
 
 <title>Galileo</title>
@@ -33,7 +50,7 @@
     <div class="navbar-header" >
         <a class="navbar-brand" style="color:white;">GALILEO</a>
     </div>
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">            
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">                                       
         <form  name="historico" class="navbar-form" action="/historico" method="post">        
             <ul class="nav navbar-nav">     
                 <li><a onClick="historico.submit();" style="color:white">Historico</a></li>
@@ -56,11 +73,10 @@
 </nav>
     
 <br>
-<br>
-    
-<div class="panel panel-default" style="weight:100px;" >
+        
+<div class="panel panel-default" style="width: 800px;min-width:100px;position:absolute;left: 50%; margin-left: -400px;" >
   <!-- Default panel contents -->
-    <div class="panel-heading">Historial de accesos</div>
+    <div class="panel-heading" style="font-family: Arial; font-size: 140%;text-align:center;">Usuarios</div>
 
     <table class="table">
        <tr>
@@ -79,8 +95,56 @@
        <% } %>
     
     </table>    
-</div>    
+</div>        
+    
+<br>
+<br>
+      
+<div class="panel panel-default" style="width: 800px;min-width:100px;position:absolute;left: 50%; margin-left: -400px;margin-top:15%" >
+  <!-- Default panel contents -->
+    <div class="panel-heading" style="font-family: Arial; font-size: 140%;text-align:center;">Ingreso de usuarios - Historico</div>
 
+    <table class="table">
+       <tr>
+          <th>Email</th><th>Fecha entrada</th><th>Fecha salida</th>
+       </tr>
+
+       <%     
+        for (var i = 0; i < dataAuditoriaHistorico.length; i++) {         
+        %>
+        <tr>
+          <td><%= dataAuditoriaHistorico[i].email %></td>
+          <td><%= dataAuditoriaHistorico[i].fechaEntrada %></td>
+          <td><%= dataAuditoriaHistorico[i].fechaSalida %></td>
+        </tr>    
+       <% } %>
+    
+    </table>    
+</div>   
+    
+<br>
+<br>
+      
+<div class="panel panel-default" style="width: 800px;min-width:100px;position:absolute;left: 50%; margin-left: -400px;margin-top:28%" >
+  <!-- Default panel contents -->
+    <div class="panel-heading" style="font-family: Arial; font-size: 140%;text-align:center;">Ingreso de usuarios - Actuales</div>
+
+    <table class="table">
+       <tr>
+          <th>Email</th><th>Fecha entrada</th>
+       </tr>
+
+       <%     
+        for (var i = 0; i < dataAuditoria.length; i++) {         
+        %>
+        <tr>
+          <td><%= dataAuditoria[i].email %></td>
+          <td><%= dataAuditoria[i].fechaEntrada %></td>
+        </tr>    
+       <% } %>
+    
+    </table>    
+</div>            
     
 </body>
 </html>

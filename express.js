@@ -15,27 +15,15 @@ var appDir = path.dirname(require.main.filename);
 var appDirImg = appDir + "/img";
 
 
-
+var emailAdmin = "ppsgalileo@gmail.com";
+var claveAdmin = "1234";
 
 app.set('view options', { layout: false });
 app.set('view engine', 'ejs');
 
 /* serves main page */
 app.get("/", function (req, res) {
-    //res.render(appDir + '/inicio.ejs', {errorMessage: "", errorMessageRegister: "", successMessageRegister: ""});    
-    recoveryAllUsers(function(err,content){
-        if (err)
-            console.log(err)
-        else{
-            var dataObject = [];
-            for (var i=0; i < content.length; i++){
-                dataObject.push({ nombre:content[i].nombre,apellido:content[i].apellido,dni:content[i].dni,email:content[i].email});
-            }
-            var data = JSON.stringify(dataObject);
-            console.log(data);
-            res.render(appDir + '/historicoAdministrador.ejs',{data:dataObject});
-        }
-    });
+    res.render(appDir + '/inicio.ejs', {errorMessage: "", errorMessageRegister: "", successMessageRegister: ""});        
     //res.render(appDir + '/perfilAdministrador.ejs');
 });
 
@@ -84,22 +72,40 @@ app.post("/log", function(req, res) {
     if (err){
         console.log(err);
     }else{
-        if (content !== null){
-            var dBemail = content[0].email;  
-            var dBnombre = content[0].nombre;
-            var dBapellido = content[0].apellido;
-            var dBdni = content[0].dni;
-            var dBtemp = content[0].temp;
-            var dBluz = content[0].luz;
-            var dBpass = content[0].password;
-            res.render(appDir+"/perfilUsuario.ejs", {userName:dBnombre,
-                                                     userSurname:dBapellido,
-                                                     userDNI:dBdni,
-                                                     userEmail:dBemail,
-                                                     userTemp: dBtemp,
-                                                     userLuz: dBluz,
-                                                     userPass: dBpass,
-                                                     errorMessageEmail:""});
+        if (content !== null){            
+            if (req.body.email !== emailAdmin){
+                var dBemail = content[0].email;  
+                var dBnombre = content[0].nombre;
+                var dBapellido = content[0].apellido;
+                var dBdni = content[0].dni;
+                var dBtemp = content[0].temp;
+                var dBluz = content[0].luz;
+                var dBpass = content[0].password;
+                res.render(appDir+"/perfilUsuario.ejs", {userName:dBnombre,
+                                                         userSurname:dBapellido,
+                                                         userDNI:dBdni,
+                                                         userEmail:dBemail,
+                                                         userTemp: dBtemp,
+                                                         userLuz: dBluz,
+                                                         userPass: dBpass,
+                                                         errorMessageEmail:""});
+            }else{
+                var dBemail = content[0].email;  
+                var dBnombre = content[0].nombre;
+                var dBapellido = content[0].apellido;
+                var dBdni = content[0].dni;
+                var dBtemp = content[0].temp;
+                var dBluz = content[0].luz;
+                var dBpass = content[0].password;
+                res.render(appDir+"/perfilAdministrador.ejs", {userName:dBnombre,
+                                                         userSurname:dBapellido,
+                                                         userDNI:dBdni,
+                                                         userEmail:dBemail,
+                                                         userTemp: dBtemp,
+                                                         userLuz: dBluz,
+                                                         userPass: dBpass,
+                                                         errorMessageEmail:""});            
+            }
         }else{
             res.render(appDir+'/inicio.ejs',{errorMessage:"Usuario/Contrasena invalida",
                                              errorMessageRegister:"",
@@ -108,6 +114,67 @@ app.post("/log", function(req, res) {
     }
     });    
   });
+
+app.post("/historico",function(req,res){
+    recoveryAllUsers(function(err,content){
+        if (err)
+            console.log(err)
+        else{
+            var dataObject = [];
+            for (var i=0; i < content.length; i++){
+                dataObject.push({ nombre:content[i].nombre,apellido:content[i].apellido,dni:content[i].dni,email:content[i].email});
+            }
+            recoveryAuditoriaHistorico(function(err,content){
+                if (err)
+                    console.log(err)
+                else{
+                    var dataObjectAud = [];
+                    var dataObjectAudHistorico = [];
+                    for (var i=0; i < content.length; i++){                    
+                        if(content[i].fechaSalida != null){
+                            console.log("if - "+content[i].email);
+                dataObjectAudHistorico.push({email:content[i].email,fechaEntrada:content[i].fechaEntrada,fechaSalida:content[i].fechaSalida});  
+                        }else{
+                            console.log("else - "+content[i].email);
+                        dataObjectAud.push({email:content[i].email,fechaEntrada:content[i].fechaEntrada});
+                        }
+                    }                    
+                    console.log();
+                    res.render(appDir + '/historicoAdministrador.ejs',{data:dataObject,dataAuditoriaHistorico:dataObjectAudHistorico,dataAuditoria:dataObjectAud});
+                }
+            });            
+        }
+    });            
+});
+
+app.post("/perfil",function(req,res){
+    recoveryUser(emailAdmin,claveAdmin,function (err,content){
+    if (err){
+        console.log(err);
+    }else{
+        if (content !== null){                        
+                var dBemail = content[0].email;  
+                var dBnombre = content[0].nombre;
+                var dBapellido = content[0].apellido;
+                var dBdni = content[0].dni;
+                var dBtemp = content[0].temp;
+                var dBluz = content[0].luz;
+                var dBpass = content[0].password;
+                res.render(appDir+"/perfilAdministrador.ejs", {userName:dBnombre,
+                                                         userSurname:dBapellido,
+                                                         userDNI:dBdni,
+                                                         userEmail:dBemail,
+                                                         userTemp: dBtemp,
+                                                         userLuz: dBluz,
+                                                         userPass: dBpass,
+                                                         errorMessageEmail:""});
+            }else{
+                console.log("Error de acceso en base de datos - app.post(\"/perfil\"....)");
+            
+            }
+    }
+    });  
+});
  
 app.post("/modPerfil",function (req,res){
       var regEmail = req.body.email;
@@ -434,6 +501,32 @@ function saveAuditoriaDataBase (email){
     
 }
 
+function recoveryAuditoriaHistorico (callback){
+    var mysql      = require('mysql');
+    var connection = mysql.createConnection({
+      host     : ipDataBase,
+      user     : usrDataBase,
+      password : passDataBase,
+      database : nameDataBase
+    });
+    connection.connect();
+
+    var query = 'SELECT * FROM auditoria a';
+    
+    var resQuery = connection.query(query,function(err, rows, fields) {
+          if (!err){
+              if (rows.length > 0)
+                return callback(null, rows);
+              else
+                return callback (null,null)
+          }else{
+              return callback (err,null);
+          }
+        connection.end();
+    });
+
+}
+
 /*---------------------------Variables y funciones para manipular Emails--------------*/
 
 var email   = require("emailjs");
@@ -547,6 +640,7 @@ setInterval(function(){
             else{
                 if (content !== null){
                     console.log("Usuario: "+content[0].email);
+                    saveAuditoriaDataBase(content[0].email);                                        
                 }else{
                     console.log("Usuario no encontrado");
                 }
