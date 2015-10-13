@@ -22,8 +22,21 @@ app.set('view engine', 'ejs');
 
 /* serves main page */
 app.get("/", function (req, res) {
-    //res.render(appDir + '/inicio.ejs', {errorMessage: "", errorMessageRegister: "", successMessageRegister: ""});
-    res.render(appDir + '/perfilAdministrador.ejs');
+    //res.render(appDir + '/inicio.ejs', {errorMessage: "", errorMessageRegister: "", successMessageRegister: ""});    
+    recoveryAllUsers(function(err,content){
+        if (err)
+            console.log(err)
+        else{
+            var dataObject = [];
+            for (var i=0; i < content.length; i++){
+                dataObject.push({ nombre:content[i].nombre,apellido:content[i].apellido,dni:content[i].dni,email:content[i].email});
+            }
+            var data = JSON.stringify(dataObject);
+            console.log(data);
+            res.render(appDir + '/historicoAdministrador.ejs',{data:dataObject});
+        }
+    });
+    //res.render(appDir + '/perfilAdministrador.ejs');
 });
 
 app.post("/registro", function (req, res){

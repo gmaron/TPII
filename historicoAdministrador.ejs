@@ -55,5 +55,32 @@
   </div>
 </nav>
     
+<br>
+<br>
+    
+<div class="panel panel-default" style="weight:100px;" >
+  <!-- Default panel contents -->
+    <div class="panel-heading">Historial de accesos</div>
+
+    <table class="table">
+       <tr>
+          <th>Nombre</th><th>Apellido</th><th>DNI</th><th>Email</th>
+       </tr>
+
+       <%     
+        for (var i = 0; i < data.length; i++) {         
+        %>
+        <tr>
+          <td><%= data[i].nombre %></td>
+          <td><%= data[i].apellido %></td>
+          <td><%= data[i].dni %></td>
+          <td><%= data[i].email %></td>
+        </tr>    
+       <% } %>
+    
+    </table>    
+</div>    
+
+    
 </body>
 </html>
