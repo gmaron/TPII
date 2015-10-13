@@ -1,3 +1,4 @@
+
 var express = require("express");
 var app = express();
 var user = express();
@@ -110,6 +111,67 @@ app.post("/log", function(req, res) {
             res.render(appDir+'/inicio.ejs',{errorMessage:"Usuario/Contrasena invalida",
                                              errorMessageRegister:"",
                                              successMessageRegister:""});
+        }
+    }
+    });    
+  });
+
+app.post("/historico",function(req,res){
+    recoveryAllUsers(function(err,content){
+        if (err)
+            console.log(err)
+        else{
+            var dataObject = [];
+            for (var i=0; i < content.length; i++){
+                dataObject.push({ nombre:content[i].nombre,apellido:content[i].apellido,dni:content[i].dni,email:content[i].email});
+            }
+            recoveryAllAuditoria(function(err,content){
+                if (err)
+                    console.log(err)
+                else{
+                    var dataObjectAud = [];
+                    var dataObjectAudHistorico = [];
+                    for (var i=0; i < content.length; i++){                    
+                        if(content[i].fechaSalida != null){
+                            console.log("if - "+content[i].email);
+                dataObjectAudHistorico.push({email:content[i].email,fechaEntrada:content[i].fechaEntrada,fechaSalida:content[i].fechaSalida});  
+                        }else{
+                            console.log("else - "+content[i].email);
+                        dataObjectAud.push({email:content[i].email,fechaEntrada:content[i].fechaEntrada});
+                        }
+                    }                    
+                    console.log();
+                    res.render(appDir + '/historicoAdministrador.ejs',{data:dataObject,dataAuditoriaHistorico:dataObjectAudHistorico,dataAuditoria:dataObjectAud});
+                }
+            });            
+        }
+    });            
+});
+
+app.post("/perfil",function(req,res){
+    recoveryUser(emailAdmin,claveAdmin,function (err,content){
+    if (err){
+        console.log(err);
+    }else{
+        if (content !== null){                        
+                var dBemail = content[0].email;  
+                var dBnombre = content[0].nombre;
+                var dBapellido = content[0].apellido;
+                var dBdni = content[0].dni;
+                var dBtemp = content[0].temp;
+                var dBluz = content[0].luz;
+                var dBpass = content[0].password;
+                res.render(appDir+"/perfilAdministrador.ejs", {userName:dBnombre,
+                                                         userSurname:dBapellido,
+                                                         userDNI:dBdni,
+                                                         userEmail:dBemail,
+                                                         userTemp: dBtemp,
+                                                         userLuz: dBluz,
+                                                         userPass: dBpass,
+                                                         errorMessageEmail:""});
+            }else{
+                console.log("Error de acceso en base de datos - app.post(\"/perfil\"....)");
+            
             }
     }
     });  
@@ -444,7 +506,7 @@ function saveAuditoriaDataBase (email){
     
 }
 
-function recoveryAuditoriaHistorico (callback){
+function recoveryAllAuditoria (callback){
     var mysql      = require('mysql');
     var connection = mysql.createConnection({
       host     : ipDataBase,
@@ -504,6 +566,7 @@ function updateAuditoriaDataBase(email){
     
     
 }
+
 
 
 /*---------------------------Variables y funciones para manipular Emails--------------*/
