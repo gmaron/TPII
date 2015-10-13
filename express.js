@@ -648,6 +648,21 @@ child = exec(ejecutarTeclas, function (error, stdout, stderr) {
 });
 
 
+function tempActual (){
+    var text = "";
+    var possible = "0123456789";
+    var tempEncontrada = 0;
+    while (tempEncontrada === 0){ 
+        for( var i=0; i < 2; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        if ((parseInt(text,10) < 30)&&(parseInt(text,10) > 18))
+            tempEncontrada = 1;
+        else
+            text = "";
+    }
+    return text;
+}
+
 
 /*
 *
@@ -681,6 +696,8 @@ setInterval(function(){
                 if (content !== null){                    
                     var dBusr = content[0].email;
                     var registrado = 0;
+                    var dBtemp = content[0].temp;
+                    var dBluz = content[0].luz;
                     console.log("Usuario: "+content[0].email);
                     recoveryAllAuditoria(function(err,content){
                         for (var i = 0; i < content.length ; i++){
@@ -693,7 +710,17 @@ setInterval(function(){
                         }
                         if (registrado === 0){
                             saveAuditoriaDataBase(dBusr);                                      
-                            console.log("DISFRUTE SU ESTADIA");                            
+                            console.log("DISFRUTE SU ESTADIA");  
+                            console.log("Ambiente a acondicionar -> Temperatura: "+dBtemp+" Luz:"+dBluz);
+                            var temp = tempActual();  
+                            console.log("Temperatura sensada: "+temp);
+                            if (dBtemp < temp){
+                                console.log("Bajar temperatura");
+                            }else{
+                                console.log("Subir temperatura");
+                            }
+                            console.log("Enciendo luz hasta "+dBluz+"%");
+                            
                         }
                         else{
                             console.log("MUCHAS GRACIAS. VUELVA PRONTOS");
