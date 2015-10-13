@@ -110,67 +110,6 @@ app.post("/log", function(req, res) {
             res.render(appDir+'/inicio.ejs',{errorMessage:"Usuario/Contrasena invalida",
                                              errorMessageRegister:"",
                                              successMessageRegister:""});
-        }
-    }
-    });    
-  });
-
-app.post("/historico",function(req,res){
-    recoveryAllUsers(function(err,content){
-        if (err)
-            console.log(err)
-        else{
-            var dataObject = [];
-            for (var i=0; i < content.length; i++){
-                dataObject.push({ nombre:content[i].nombre,apellido:content[i].apellido,dni:content[i].dni,email:content[i].email});
-            }
-            recoveryAuditoriaHistorico(function(err,content){
-                if (err)
-                    console.log(err)
-                else{
-                    var dataObjectAud = [];
-                    var dataObjectAudHistorico = [];
-                    for (var i=0; i < content.length; i++){                    
-                        if(content[i].fechaSalida != null){
-                            console.log("if - "+content[i].email);
-                dataObjectAudHistorico.push({email:content[i].email,fechaEntrada:content[i].fechaEntrada,fechaSalida:content[i].fechaSalida});  
-                        }else{
-                            console.log("else - "+content[i].email);
-                        dataObjectAud.push({email:content[i].email,fechaEntrada:content[i].fechaEntrada});
-                        }
-                    }                    
-                    console.log();
-                    res.render(appDir + '/historicoAdministrador.ejs',{data:dataObject,dataAuditoriaHistorico:dataObjectAudHistorico,dataAuditoria:dataObjectAud});
-                }
-            });            
-        }
-    });            
-});
-
-app.post("/perfil",function(req,res){
-    recoveryUser(emailAdmin,claveAdmin,function (err,content){
-    if (err){
-        console.log(err);
-    }else{
-        if (content !== null){                        
-                var dBemail = content[0].email;  
-                var dBnombre = content[0].nombre;
-                var dBapellido = content[0].apellido;
-                var dBdni = content[0].dni;
-                var dBtemp = content[0].temp;
-                var dBluz = content[0].luz;
-                var dBpass = content[0].password;
-                res.render(appDir+"/perfilAdministrador.ejs", {userName:dBnombre,
-                                                         userSurname:dBapellido,
-                                                         userDNI:dBdni,
-                                                         userEmail:dBemail,
-                                                         userTemp: dBtemp,
-                                                         userLuz: dBluz,
-                                                         userPass: dBpass,
-                                                         errorMessageEmail:""});
-            }else{
-                console.log("Error de acceso en base de datos - app.post(\"/perfil\"....)");
-            
             }
     }
     });  
@@ -236,6 +175,8 @@ var port = process.env.PORT || 5000;
 app.listen(port, function() {
    console.log("Listening on " + port);
 });
+
+
 
 /*---------------------------Variables y funciones para la Base de Datos--------------*/
 
@@ -479,7 +420,9 @@ function saveAuditoriaDataBase (email){
     var yy = hoy.getFullYear();
     var hh = hoy.getHours();
     var min = hoy.getMinutes();
-    
+        if (parseInt(min,10) < 10){
+        min = '0'+min;
+    }
     var fechaEntrada = hh+":"+min+" - "+dd+"/"+mm+"/"+yy;
     
     var mysql      = require('mysql');
@@ -526,6 +469,42 @@ function recoveryAuditoriaHistorico (callback){
     });
 
 }
+
+function updateAuditoriaDataBase(email){
+    var hoy = new Date();
+    var dd = hoy.getDate();
+    var mm = hoy.getMonth()+1; //Enero es el mes 0
+    var yy = hoy.getFullYear();
+    var hh = hoy.getHours();
+    var min = hoy.getMinutes();
+    if (parseInt(min,10) < 10){
+        min = '0'+min;
+    }
+    
+    var fechaSalida = hh+":"+min+" - "+dd+"/"+mm+"/"+yy;
+    
+    var mysql      = require('mysql');
+    var connection = mysql.createConnection({
+      host     : ipDataBase,
+      user     : usrDataBase,
+      password : passDataBase,
+      database : nameDataBase
+    });
+    connection.connect();
+    var valuesInsert = {fechaSalida: fechaSalida};
+    var query = connection.query('UPDATE auditoria a SET ? WHERE (a.fechaSalida IS NULL)&&(a.email="'+email+'");', valuesInsert,       function(err, result) {
+        if (err)
+            console.log(err);
+        
+    });
+    
+    
+
+    connection.end();
+    
+    
+}
+
 
 /*---------------------------Variables y funciones para manipular Emails--------------*/
 
@@ -597,7 +576,7 @@ function getPassword(passConEnter){
 */
 var exec = require('child_process').exec;
 var child;
-var evento = "/dev/input/event4";
+var evento = "/dev/input/event1";
 var ejecutarTeclas = "cd "+appDir+"; ./teclado "+evento;
 child = exec(ejecutarTeclas, function (error, stdout, stderr) {
   console.log('stdout: ' + stdout);
@@ -639,8 +618,30 @@ setInterval(function(){
                 console.log(err);
             else{
                 if (content !== null){
+                    
+                    var dBusr = content[0].email;
+                    var registrado = 0;
                     console.log("Usuario: "+content[0].email);
-                    saveAuditoriaDataBase(content[0].email);                                        
+                    recoveryAllAuditoria(function(err,content){
+                        for (var i = 0; i < content.length ; i++){
+                            if ((content[i].fechaSalida === null)&&(content[i].email === dBusr)){
+                                console.log("actualizo")
+                                updateAuditoriaDataBase(content[i].email);
+                                registrado = 1;
+                                break;
+                            }
+                        }
+                        if (registrado === 0){
+                            saveAuditoriaDataBase(dBusr);                                      
+                            console.log("DISFRUTE SU ESTADIA");
+                        }
+                        else{
+                            console.log("MUCHAS GRACIAS. VUELVA PRONTOS");
+                        }
+                        
+                        
+                    });
+                    
                 }else{
                     console.log("Usuario no encontrado");
                 }
