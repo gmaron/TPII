@@ -1,0 +1,59 @@
+<html>
+<head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>    
+    <style type="text/css">
+        body {        
+            font-family: "Arial";
+            font-size: 140%;
+            background-image: url("img/fondo.jpg");
+            
+        }   
+ 
+         a:hover {
+          cursor:pointer;
+         }
+    </style>
+    <link rel="shortcut icon" type="image/png" href="/img/favicon.png"/>
+
+<title>Galileo</title>
+</head>
+<body>
+    
+<nav class="navbar navbar-default" style="background:#0B0B61">
+  <div class="container-fluid">    
+    <div class="navbar-header" >
+        <a class="navbar-brand" style="color:white;">GALILEO</a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">            
+        <form  name="historico" class="navbar-form" action="/historico" method="post">        
+            <ul class="nav navbar-nav">     
+                <li><a onClick="historico.submit();" style="color:white">Historico</a></li>
+            </ul>        
+        </form>
+        <form name="perfil" class="navbar-form" action="/perfil" method="post">        
+            <ul class="nav navbar-nav">     
+                <li><a onClick="perfil.submit();" style="color:white">Perfil</a></li>
+            </ul>        
+        </form>             
+        <form name="cerrarSesion" action="/cerrarSesion" method="post">
+          <ul class="nav navbar-nav navbar-right">       
+            <ul class="nav navbar-nav">     
+                <li><a onClick="cerrarSesion.submit();" style="color:white">Cerrar sesión</a></li>
+            </ul>            
+          </ul>
+        </form>                
+    </div>    
+  </div>
+</nav>
+    
+</body>
+</html>

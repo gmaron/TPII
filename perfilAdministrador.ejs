@@ -1,0 +1,135 @@
+<html>
+<head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>    
+    <style type="text/css">
+        body {        
+            font-family: "Arial";
+            font-size: 140%;
+            background-image: url("img/fondo.jpg");
+            
+        }   
+ 
+         a:hover {
+          cursor:pointer;
+         }
+    </style>
+    <link rel="shortcut icon" type="image/png" href="/img/favicon.png"/>
+
+<title>Galileo</title>
+</head>
+<body>
+    
+<nav class="navbar navbar-default" style="background:#0B0B61">
+  <div class="container-fluid">    
+    <div class="navbar-header" >
+        <a class="navbar-brand" style="color:white;">GALILEO</a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">            
+        <form  name="historico" class="navbar-form" action="/historico" method="post">        
+            <ul class="nav navbar-nav">     
+                <li><a onClick="historico.submit();" style="color:white">Historico</a></li>
+            </ul>        
+        </form>
+        <form name="perfil" class="navbar-form" action="/perfil" method="post">        
+            <ul class="nav navbar-nav">     
+                <li><a onClick="perfil.submit();" style="color:white">Perfil</a></li>
+            </ul>        
+        </form>             
+        <form name="cerrarSesion" action="/cerrarSesion" method="post">
+          <ul class="nav navbar-nav navbar-right">       
+            <ul class="nav navbar-nav">     
+                <li><a onClick="cerrarSesion.submit();" style="color:white">Cerrar sesión</a></li>
+            </ul>            
+          </ul>
+        </form>                
+    </div>    
+  </div>
+</nav>
+    
+<br>
+<br>   
+    
+<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >      
+  <form class="form-horizontal" role="form" name="form1" method="post" action="/modPerfil" target="_self" data-toggle="validator">
+  <div class="panel panel-info">
+    <div class="panel-heading" style="background:#0B0B61">
+              <h3 class="panel-title" style="text-align: center;color:white;">Usuario Galileo</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">                
+            <div class=" col-md-9 col-lg-12"> 
+                  <table class="table table-user-information">
+                    <tbody>
+                      <tr>
+                        <td>Nombre:</td>
+                        <td><input type="text" class="form-control" name="nom" placeholder="Juan" value="<%= userName %>" required="true"></td>
+                      </tr>
+                      <tr>
+                        <td>Apellido:</td>
+                        <td>
+<input type="text" class="form-control" name="ape" placeholder="Lopez" value="<%= userSurname %>" required="true">    </td>
+                      </tr>
+                      <tr>
+                        <td>DNI:</td>
+                        <td><%= userDNI %></td>
+                      </tr> 
+                      <tr>
+                        <td>Email:</td>
+                        <td><input type="email" class="form-control" name="email" value=<%= userEmail %> placeholder="email@dominio.com">
+                            <br>
+                            <label style="color:red"><%= errorMessageEmail %></label>
+                        </td>
+                      </tr> 
+                      <tr>
+                        <td>Contraseña:</td>
+                          <td><label type="text" name="pass" ><%= userPass %></label></td>
+                      </tr>     
+                      <tr>
+                        <td>Temperatura seleccionada:</td>
+                        <td>
+                         <input name ="temp" type="range" min="18" max="30" value=<%= userTemp %> step="1" onchange="showValueTemp(this.value)" />
+                            <span id="rangeTemp"><%= userTemp %></span>
+                            <script type="text/javascript">
+                            function showValueTemp(newValue)
+                            {
+                                document.getElementById("rangeTemp").innerHTML=newValue;
+                            }
+                            </script>
+                        </td>
+                      </tr>                                           
+                      <tr>
+                        <td>Intensidad de luz:</td>
+                        <td>
+                         <input name ="luz" type="range" min="0" max="100" value=<%= userLuz %> step="5" onchange="showValueLuz(this.value)" />
+                            <span id="rangeLuz"><%= userLuz %></span>
+                            <script type="text/javascript">
+                            function showValueLuz(newValue)
+                            {
+                                document.getElementById("rangeLuz").innerHTML=newValue;
+                            }
+                            </script>
+                        </td>                          
+                      </tr>                       
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <button name="commandButton" type="submit" class="btn btn-default" value="modPerfil"  style="background:#0B0B61;color:white;width:590px; margin: 0 auto;">Modificar perfil</button>                        
+    </div>   
+  </div>
+</form>
+</div>    
+    
+</body>
+</html>

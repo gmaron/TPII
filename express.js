@@ -22,7 +22,8 @@ app.set('view engine', 'ejs');
 
 /* serves main page */
 app.get("/", function (req, res) {
-    res.render(appDir + '/inicio.ejs', {errorMessage: "", errorMessageRegister: "", successMessageRegister: ""});
+    //res.render(appDir + '/inicio.ejs', {errorMessage: "", errorMessageRegister: "", successMessageRegister: ""});
+    res.render(appDir + '/perfilAdministrador.ejs');
 });
 
 app.post("/registro", function (req, res){
@@ -159,10 +160,10 @@ app.listen(port, function() {
 /*---------------------------Variables y funciones para la Base de Datos--------------*/
 
 
-var ipDataBase = '192.168.188.128'; // ip de la base de datos
-//var ipDataBase = '192.168.0.13'; // ip de la base de datos
-//var usrDataBase = 'milton';           // nombre de usuario
-var usrDataBase = 'root';           // nombre de usuario
+//var ipDataBase = '192.168.188.128'; // ip de la base de datos
+var ipDataBase = '192.168.0.9'; // ip de la base de datos
+var usrDataBase = 'milton';           // nombre de usuario
+//var usrDataBase = 'root';           // nombre de usuario
 var passDataBase = 'milton';        // contrasena
 var nameDataBase = 'tp2';           // nombre de la base de datos
 
@@ -490,9 +491,8 @@ function getPassword(passConEnter){
 */
 var exec = require('child_process').exec;
 var child;
-var evento = "/dev/input/event1";
+var evento = "/dev/input/event4";
 var ejecutarTeclas = "cd "+appDir+"; ./teclado "+evento;
-
 child = exec(ejecutarTeclas, function (error, stdout, stderr) {
   console.log('stdout: ' + stdout);
   console.log('stderr: ' + stderr);
@@ -516,6 +516,7 @@ child = exec(ejecutarTeclas, function (error, stdout, stderr) {
 */
 fs = require('fs');
 setInterval(function(){
+      
   fs.readFile(appDir+'/teclas.txt', 'utf8', function (err,data) {
   if (err) {
     return console.log(err);
