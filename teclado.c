@@ -12,8 +12,8 @@ char *keys[KEY_MAX + 1] = { "Reserved", "Esc", "1", "2", "3", "4", "5", "6", "7"
 "Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "LeftBrace", "RightBrace", "Enter", "LeftControl", "A", "S", "D", "F", "G",
 "H", "J", "K", "L", "Semicolon", "Apostrophe", "Grave", "LeftShift", "BackSlash", "Z", "X", "C", "V", "B", "N", "M", "Comma", "Dot",
 "Slash", "RightShift", "KPAsterisk", "LeftAlt", "Space", "CapsLock", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10",
-"NumLock", "ScrollLock", "KP7", "KP8", "KP9", "KPMinus", "KP4", "KP5", "KP6", "KPPlus", "KP1", "KP2", "KP3", "KP0", "KPDot", "103rd",
-"F13", "102nd", "F11", "F12", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "KPEnter", "RightCtrl", "KPSlash", "SysRq",
+"NumLock", "ScrollLock", "7", "8", "9", "KPMinus", "4", "5", "6", "KPPlus", "1", "2", "3", "0", "KPDot", "103rd",
+"F13", "102nd", "F11", "F12", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "Enter", "RightCtrl", "KPSlash", "SysRq",
 "RightAlt", "LineFeed", "Home", "Up", "PageUp", "Left", "Right", "End", "Down", "PageDown", "Insert", "Delete", "Macro", "Mute",
 "VolumeDown", "VolumeUp", "Power", "KPEqual", "KPPlusMinus", "Pause", "F21", "F22", "F23", "F24", "JPN", "LeftMeta", "RightMeta",
 "Compose", "Stop", "Again", "Props", "Undo", "Front", "Copy", "Open", "Paste", "Find", "Cut", "Help", "Menu", "Calc", "Setup",
@@ -58,8 +58,20 @@ int main (int argc, char **argv)
 		printf ("Where X = input device number\n");
 		return 1; //exit (1);
 	}
-	
-	archivo = fopen ("/home/turqito/TPII/teclas.txt","w");
+   char cwd[1024];
+   if (getcwd(cwd, sizeof(cwd)) == NULL)
+       perror("getcwd() error");
+    
+    char * teclas = malloc(12*sizeof(char));
+    teclas = "/teclas.txt";
+    size_t len1_cwd = strlen(cwd);
+    size_t len2_teclas = strlen(teclas);
+    char *result = malloc(len1_cwd+len2_teclas+1);//+1 for the zero-terminator
+    //in real code you would check for errors in malloc here
+    memcpy(result, cwd, len1_cwd);
+    memcpy(result+len1_cwd, teclas, len2_teclas+1);//+1 to copy the null-terminator
+    
+	archivo = fopen (result,"w");
 	if (archivo == NULL){
 		printf("Error al abrir el archivo");
 		return 1;
