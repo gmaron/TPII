@@ -133,10 +133,8 @@ app.post("/historico",function(req,res){
                     var dataObjectAudHistorico = [];
                     for (var i=0; i < content.length; i++){                    
                         if(content[i].fechaSalida != null){
-                            console.log("if - "+content[i].email);
                 dataObjectAudHistorico.push({email:content[i].email,fechaEntrada:content[i].fechaEntrada,fechaSalida:content[i].fechaSalida});  
                         }else{
-                            console.log("else - "+content[i].email);
                         dataObjectAud.push({email:content[i].email,fechaEntrada:content[i].fechaEntrada});
                         }
                     }                    
@@ -639,7 +637,7 @@ function getPassword(passConEnter){
 */
 var exec = require('child_process').exec;
 var child;
-var evento = "/dev/input/event1";
+var evento = "/dev/input/event4";
 var ejecutarTeclas = "cd "+appDir+"; ./teclado "+evento;
 child = exec(ejecutarTeclas, function (error, stdout, stderr) {
   console.log('stdout: ' + stdout);
@@ -680,8 +678,7 @@ setInterval(function(){
             if (err)
                 console.log(err);
             else{
-                if (content !== null){
-                    
+                if (content !== null){                    
                     var dBusr = content[0].email;
                     var registrado = 0;
                     console.log("Usuario: "+content[0].email);
@@ -696,15 +693,12 @@ setInterval(function(){
                         }
                         if (registrado === 0){
                             saveAuditoriaDataBase(dBusr);                                      
-                            console.log("DISFRUTE SU ESTADIA");
+                            console.log("DISFRUTE SU ESTADIA");                            
                         }
                         else{
                             console.log("MUCHAS GRACIAS. VUELVA PRONTOS");
-                        }
-                        
-                        
-                    });
-                    
+                        }                                                
+                    });                    
                 }else{
                     console.log("Usuario no encontrado");
                 }
