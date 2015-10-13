@@ -35,6 +35,13 @@
             
             color: white;
         }
+        
+        .tabla {  
+            height: 200px !important;
+            overflow: scroll;
+        }
+
+
     </style>
     
     
@@ -73,37 +80,45 @@
 </nav>
     
 <br>
-        
+<div class="container">
+<div class="row">
+
 <div class="panel panel-default" style="width: 800px;min-width:100px;position:absolute;left: 50%; margin-left: -400px;" >
   <!-- Default panel contents -->
     <div class="panel-heading" style="font-family: Arial; font-size: 140%;text-align:center;">Usuarios</div>
-
+    <div class="tabla">
     <table class="table">
        <tr>
           <th>Nombre</th><th>Apellido</th><th>DNI</th><th>Email</th>
        </tr>
-
+        
+        
        <%     
         for (var i = 0; i < data.length; i++) {         
         %>
+        <tbody>
         <tr>
           <td><%= data[i].nombre %></td>
           <td><%= data[i].apellido %></td>
           <td><%= data[i].dni %></td>
           <td><%= data[i].email %></td>
-        </tr>    
-       <% } %>
-    
-    </table>    
+        </tr>  
+        </tbody>
+       <% } %>  
+        
+    </table> 
+    </div>
 </div>        
+</div>   
+</div>   
     
 <br>
 <br>
       
-<div class="panel panel-default" style="width: 800px;min-width:100px;position:absolute;left: 50%; margin-left: -400px;margin-top:15%" >
+<div class="panel panel-default" style="width: 800px;min-width:100px;position:absolute;left: 50%; margin-left: -400px;margin-top:18%" >
   <!-- Default panel contents -->
     <div class="panel-heading" style="font-family: Arial; font-size: 140%;text-align:center;">Ingreso de usuarios - Historico</div>
-
+    <div class="tabla">
     <table class="table">
        <tr>
           <th>Email</th><th>Fecha entrada</th><th>Fecha salida</th>
@@ -120,15 +135,16 @@
        <% } %>
     
     </table>    
-</div>   
+    </div>  
+</div>
     
 <br>
 <br>
       
-<div class="panel panel-default" style="width: 800px;min-width:100px;position:absolute;left: 50%; margin-left: -400px;margin-top:28%" >
+<div class="panel panel-default" style="width: 800px;min-width:100px;position:absolute;left: 50%; margin-left: -400px;margin-top:36%" >
   <!-- Default panel contents -->
     <div class="panel-heading" style="font-family: Arial; font-size: 140%;text-align:center;">Ingreso de usuarios - Actuales</div>
-
+    <div class="tabla">
     <table class="table">
        <tr>
           <th>Email</th><th>Fecha entrada</th>
@@ -144,7 +160,8 @@
        <% } %>
     
     </table>    
-</div>            
+</div>  
+</div>
     
 </body>
 </html>
