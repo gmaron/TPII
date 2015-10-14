@@ -11,7 +11,6 @@ app.use(bodyParser.urlencoded({
 
 var path = require('path');
 var appDir = path.dirname(require.main.filename);
-var appDirImg = appDir + "/img";
 
 var emailAdmin = "ppsgalileo@gmail.com";
 var claveAdmin = "1234";
@@ -235,8 +234,8 @@ app.listen(port, function() {
 /*---------------------------Variables y funciones para la Base de Datos--------------*/
 
 
-var ipDataBase = '192.168.0.13'; // ip de la base de datos
-var usrDataBase = 'milton';           // nombre de usuario
+var ipDataBase = '192.168.0.13'; 	// ip de la base de datos
+var usrDataBase = 'milton';         // nombre de usuario
 var passDataBase = 'milton';        // contrasena
 var nameDataBase = 'tp2';           // nombre de la base de datos
 
@@ -245,9 +244,16 @@ var nameDataBase = 'tp2';           // nombre de la base de datos
 *   function: saveUserDataBase()
 *       ---> genera la conexion y guarda un usuario en la base de datos
 *   Parametros       
-*
+*		--> nombre: nombre del usuario
+*		--> apellido: apellido del usuario
+*		--> dni: dni del usuario
+*		--> email: email del usuario
+*		--> pass: contrasena del usuario
+*		--> temp: temperatura elegida por el usuario
+*		--> luz: porcentaje de luz elegido por el usuario
 *
 */
+
 function saveUserDataBase(nombre,apellido,dni,email,pass,temp,luz){
     var mysql      = require('mysql');
     var connection = mysql.createConnection({      
@@ -258,15 +264,14 @@ function saveUserDataBase(nombre,apellido,dni,email,pass,temp,luz){
         
     });
     connection.connect();
-    console.log(pass);
+    
     var valuesInsert = {nombre: nombre, apellido: apellido, dni: dni, email: email, password: pass, temp:temp, luz:luz};
     var query = connection.query('INSERT INTO usuario SET ?', valuesInsert, function(err, result) {
-        // Neat!
+        if (err)
+            console.log(err);
     });
 
     connection.end();
-    
-
 }
 
 
@@ -489,7 +494,8 @@ function saveAuditoriaDataBase (email){
     
     var valuesInsert = {fechaEntrada: fechaEntrada, email: email};
     var query = connection.query('INSERT INTO auditoria SET ?', valuesInsert, function(err, result) {
-        // Neat!
+        if (err)
+            console.log(err);
     });
 
     connection.end();
@@ -550,11 +556,7 @@ function updateAuditoriaDataBase(email){
         
     });
     
-    
-
-    connection.end();
-    
-    
+    connection.end();  
 }
 
 

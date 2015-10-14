@@ -88,8 +88,6 @@ int main (int argc, char **argv)
 		return 1;//exit(1);
 	}
 
-	printf("\nMensajito para Gaston Bezzi\n\n");
-    int termino = 0;
 
     /*
         habilitar la lectura de las teclas desde el javascript a traves de un archivo
@@ -98,7 +96,7 @@ int main (int argc, char **argv)
     */
 	while (1) {
 
-        while( termino == 0 ){
+        
             rd = read(fd, ev, sizeof(struct input_event) * 64);
 
             if (rd < sizeof(struct input_event)) {
@@ -114,14 +112,11 @@ int main (int argc, char **argv)
                         tecla = names[ev[i].type] ? (names[ev[i].type][ev[i].code] ? names[ev[i].type][ev[i].code] : "?") : "?";
                         printf("---%s---\n", tecla);
 
-                        if (tecla== "Enter"){
-                             printf("----Se presiono enter----\n");
-                        }
                         fprintf(archivo,tecla);
                         fflush(archivo);
                     }
                 }
-        }
+        
     }
 	fclose(archivo);
 }
