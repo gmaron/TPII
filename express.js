@@ -242,7 +242,7 @@ app.listen(port, function() {
 
 
 //var ipDataBase = '192.168.188.128'; // ip de la base de datos
-var ipDataBase = '192.168.0.9'; // ip de la base de datos
+var ipDataBase = '192.168.0.13'; // ip de la base de datos
 var usrDataBase = 'milton';           // nombre de usuario
 //var usrDataBase = 'root';           // nombre de usuario
 var passDataBase = 'milton';        // contrasena
@@ -626,6 +626,10 @@ function getPassword(passConEnter){
     return pass;
 }
 
+function algo(){
+
+    console.log("Aprete algo");
+}
 
 
 /*
@@ -639,14 +643,14 @@ var exec = require('child_process').exec;
 var child;
 var evento = "/dev/input/event4";
 var ejecutarTeclas = "cd "+appDir+"; ./teclado "+evento;
-child = exec(ejecutarTeclas, function (error, stdout, stderr) {
-  console.log('stdout: ' + stdout);
-  console.log('stderr: ' + stderr);
-  if (error !== null) {
-    console.log('exec error: ' + error);
-  }
-});
-
+child = exec(ejecutarTeclas);
+//child = exec(ejecutarTeclas, function (error, stdout, stderr) {
+//  console.log('stdout: ' + stdout);
+//  console.log('stderr: ' + stderr);
+//  if (error !== null) {
+//    console.log('exec error: ' + error);
+//  }
+//});
 
 function tempActual (){
     var text = "";
@@ -719,8 +723,7 @@ setInterval(function(){
                             }else{
                                 console.log("Subir temperatura");
                             }
-                            console.log("Enciendo luz hasta "+dBluz+"%");
-                            
+                            console.log("Enciendo luz hasta "+dBluz+" % ");                              
                         }
                         else{
                             console.log("MUCHAS GRACIAS. VUELVA PRONTOS");

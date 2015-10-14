@@ -1,9 +1,8 @@
 <html>
 <head>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-    
-    
-<!--    <script src="sorttable.js"></script>-->
+
+    <!--    <script src="sorttable.js"></script>-->
     
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -24,26 +23,12 @@
          a:hover {
           cursor:pointer;
          }
-        
-        table.sortable thead {
-            background-color:#eee;
-            color:#666666;
-            font-weight: bold;
-            cursor: default;
-            border: 1px solid green;
-            background-color: green;
-            
-            color: white;
-        }
-        
+                     
         .tabla {  
             height: 200px !important;
             overflow: scroll;
         }
-
-
     </style>
-    
     
     
     <link rel="shortcut icon" type="image/png" href="/img/favicon.png"/>
@@ -57,7 +42,7 @@
     <div class="navbar-header" >
         <a class="navbar-brand" style="color:white;">GALILEO</a>
     </div>
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">                                       
+    <!--<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">                                       
         <form  name="historico" class="navbar-form" action="/historico" method="post">        
             <ul class="nav navbar-nav">     
                 <li><a onClick="historico.submit();" style="color:white">Informacion</a></li>
@@ -75,7 +60,38 @@
             </ul>            
           </ul>
         </form>                
-    </div>    
+    </div>  -->
+    <div class="collapse navbar-collapse" > 
+        
+        <form  name="historico" action="/historico" class="navbar-form navbar-left" method="post" role="tag">                                
+            <!--<a onClick="historico.submit();" style="color:white;text-align:center;">Informacion</a>                        -->
+            <div class="form-group">
+                <button id="historico" type="submit" class="btn btn-inverse">Informacion</button>    
+            </div>            
+        </form>        
+        
+        <form name="perfil" action="/perfil" class="navbar-form navbar-left" method="post" role="tag">                
+            <!--<a onClick="perfil.submit();" style="color:white;text-align:center;">Perfil</a>            -->
+            <div class="form-group">
+            </div>
+            <button id="perfil" type="submit" class="btn btn-inverse">Perfil</button>    
+
+        </form>             
+        
+        <form class="navbar-form navbar-right" role="tag" method="post" name="cerrarSesion"  action="/cerrarSesion">
+            <div class="form-group">
+            </div>
+            <button id="cerrarSesion" type="submit" class="btn btn-inverse">Cerrar sesión</button>    
+  		  </form>            
+        
+        <!--<form name="cerrarSesion" action="/cerrarSesion" method="post">
+          <ul class="nav navbar-nav navbar-right">       
+            <ul class="nav navbar-nav">     
+                <li><a onClick="cerrarSesion.submit();" style="color:white">Cerrar sesión</a></li>
+            </ul>            
+          </ul>
+        </form>                -->
+    </div>  
   </div>
 </nav>
     
@@ -85,7 +101,7 @@
 
 <div class="panel panel-default" style="width: 800px;min-width:100px;position:absolute;left: 50%; margin-left: -400px;" >
   <!-- Default panel contents -->
-    <div class="panel-heading" style="font-family: Arial; font-size: 140%;text-align:center;">Usuarios</div>
+    <div class="panel-heading" style="font-family: Arial; font-size: 140%;text-align:center;background:#0B0B61;color:white;">Usuarios</div>
     <div class="tabla">
     <table class="table">
        <tr>
@@ -117,7 +133,7 @@
       
 <div class="panel panel-default" style="width: 800px;min-width:100px;position:absolute;left: 50%; margin-left: -400px;margin-top:18%" >
   <!-- Default panel contents -->
-    <div class="panel-heading" style="font-family: Arial; font-size: 140%;text-align:center;">Ingreso de usuarios - Historico</div>
+    <div class="panel-heading" style="font-family: Arial; font-size: 140%;text-align:center;background:#0B0B61;color:white;">Ingreso de usuarios - Historico</div>
     <div class="tabla">
     <table class="table">
        <tr>
@@ -143,7 +159,7 @@
       
 <div class="panel panel-default" style="width: 800px;min-width:100px;position:absolute;left: 50%; margin-left: -400px;margin-top:36%" >
   <!-- Default panel contents -->
-    <div class="panel-heading" style="font-family: Arial; font-size: 140%;text-align:center;">Ingreso de usuarios - Actuales</div>
+    <div class="panel-heading" style="font-family: Arial; font-size: 140%;text-align:center;background:#0B0B61;color:white;">Ingreso de usuarios - Actuales</div>
     <div class="tabla">
     <table class="table">
        <tr>

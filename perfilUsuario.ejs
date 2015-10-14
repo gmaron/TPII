@@ -34,13 +34,18 @@
         <a class="navbar-brand" style="color:white;">GALILEO</a>
     </div>
    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    <form name="cerrarSesion" action="/cerrarSesion" method="post">
+    <!--<form name="cerrarSesion" action="/cerrarSesion" method="post">
       <ul class="nav navbar-nav navbar-right">       
         <ul class="nav navbar-nav">     
             <li><a onClick="cerrarSesion.submit();" style="color:white">Cerrar sesión</a></li>
         </ul>            
       </ul>
-      </form>
+      </form>-->
+       <form class="navbar-form navbar-right" role="tag" method="post" name="cerrarSesion"  action="/cerrarSesion">
+            <div class="form-group">
+            </div>
+            <button id="cerrarSesion" type="submit" class="btn btn-inverse">Cerrar sesión</button>    
+  		</form>
     </div>
   </div>
 </nav>
