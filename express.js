@@ -670,7 +670,7 @@ function tempActual (){
 fs = require('fs');
 setInterval(function(){
       
-  fs.readFile(appDir+'/teclas.txt', 'utf8', function (err,data) {
+  fs.readFile(appDir+'/teclas.txt', 'utf8', function (err,data) {   
   if (err) {
     return console.log(err);
   }else{
@@ -694,7 +694,6 @@ setInterval(function(){
                     recoveryAllAuditoria(function(err,content){
                         for (var i = 0; i < content.length ; i++){
                             if ((content[i].fechaSalida === null)&&(content[i].email === dBusr)){
-                                console.log("actualizo")
                                 updateAuditoriaDataBase(content[i].email);
                                 registrado = 1;
                                 break;
@@ -703,7 +702,7 @@ setInterval(function(){
                         if (registrado === 0){
                             saveAuditoriaDataBase(dBusr);                                      
                             console.log("DISFRUTE SU ESTADIA");  
-                            console.log("Ambiente a acondicionar -> Temperatura: "+dBtemp+" Luz:"+dBluz);                            
+                            console.log("Ambiente a acondicionar -> Temperatura: "+dBtemp+" Luz:"+dBluz);
                             simuladorSensores(dBtemp,dBluz);
                         }
                         else{

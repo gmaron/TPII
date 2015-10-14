@@ -1,2 +1,3 @@
 En el inicio, no corroboramos que el DNI este en la base de datos.
 Problema cuando el usuario quiere modificar el Email y este ya se encuentra en la base de datos.
+Si se registran dos usuarios al mismo tiempo, el programa no termina nunca
