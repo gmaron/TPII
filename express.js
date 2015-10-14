@@ -626,11 +626,6 @@ function getPassword(passConEnter){
     return pass;
 }
 
-function algo(){
-
-    console.log("Aprete algo");
-}
-
 
 /*
 *
