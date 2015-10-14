@@ -1,7 +1,7 @@
-
 var express = require("express");
 var app = express();
-var user = express();
+
+//var user = express();
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -9,12 +9,9 @@ app.use(bodyParser.urlencoded({
     extend:true
 }));
 
-
-
 var path = require('path');
 var appDir = path.dirname(require.main.filename);
 var appDirImg = appDir + "/img";
-
 
 var emailAdmin = "ppsgalileo@gmail.com";
 var claveAdmin = "1234";
@@ -25,7 +22,6 @@ app.set('view engine', 'ejs');
 /* serves main page */
 app.get("/", function (req, res) {
     res.render(appDir + '/inicio.ejs', {errorMessage: "", errorMessageRegister: "", successMessageRegister: ""});        
-    //res.render(appDir + '/perfilAdministrador.ejs');
 });
 
 app.post("/registro", function (req, res){
@@ -225,11 +221,12 @@ app.post("/cerrarSesion",function (req,res){
         res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"",successMessageRegister:""});
 });
 
- /* serves all the static files */
+ // serves all the static files 
 app.get(/^(.+)$/, function(req, res){ 
      console.log('static file request : ' + req.params);
      res.sendfile( __dirname + req.params[0]); 
  });
+ 
  
 var port = process.env.PORT || 5000;
 app.listen(port, function() {
@@ -241,10 +238,8 @@ app.listen(port, function() {
 /*---------------------------Variables y funciones para la Base de Datos--------------*/
 
 
-//var ipDataBase = '192.168.188.128'; // ip de la base de datos
 var ipDataBase = '192.168.0.13'; // ip de la base de datos
 var usrDataBase = 'milton';           // nombre de usuario
-//var usrDataBase = 'root';           // nombre de usuario
 var passDataBase = 'milton';        // contrasena
 var nameDataBase = 'tp2';           // nombre de la base de datos
 
@@ -636,16 +631,15 @@ function getPassword(passConEnter){
 */
 var exec = require('child_process').exec;
 var child;
-var evento = "/dev/input/event4";
+var evento = "/dev/input/event1";
 var ejecutarTeclas = "cd "+appDir+"; ./teclado "+evento;
-child = exec(ejecutarTeclas);
-//child = exec(ejecutarTeclas, function (error, stdout, stderr) {
-//  console.log('stdout: ' + stdout);
-//  console.log('stderr: ' + stderr);
-//  if (error !== null) {
-//    console.log('exec error: ' + error);
-//  }
-//});
+child = exec(ejecutarTeclas, function (error, stdout, stderr) {
+  console.log('stdout: ' + stdout);
+  console.log('stderr: ' + stderr);
+  if (error !== null) {
+    console.log('exec error: ' + error);
+  }
+});
 
 function tempActual (){
     var text = "";
@@ -710,17 +704,11 @@ setInterval(function(){
                         if (registrado === 0){
                             saveAuditoriaDataBase(dBusr);                                      
                             console.log("DISFRUTE SU ESTADIA");  
-                            console.log("Ambiente a acondicionar -> Temperatura: "+dBtemp+" Luz:"+dBluz);
-                            var temp = tempActual();  
-                            console.log("Temperatura sensada: "+temp);
-                            if (dBtemp < temp){
-                                console.log("Bajar temperatura");
-                            }else{
-                                console.log("Subir temperatura");
-                            }
-                            console.log("Enciendo luz hasta "+dBluz+" % ");                              
+                            console.log("Ambiente a acondicionar -> Temperatura: "+dBtemp+" Luz:"+dBluz);                            
+                            simuladorSensores(dBtemp,dBluz);
                         }
                         else{
+                            clearInterval(intervalSensores);
                             console.log("MUCHAS GRACIAS. VUELVA PRONTOS");
                         }                                                
                     });                    
@@ -733,4 +721,33 @@ setInterval(function(){
   }
 })},1000);
 
+
+var intervalSensores;
+function  simuladorSensores(temp,luz){
+    console.log("Enciendo luz hasta "+luz+" % ");        
+    var tempAct = tempActual();  
+    
+    var tempActInt = parseInt(tempAct,10);
+    var tempInt = parseInt(temp,10);
+    
+    console.log("Temperatura sensada al momento del ingreso (int): "+tempActInt);
+    console.log("Temperatura pedida (int): "+tempInt);
+
+    
+    
+    intervalSensores = setInterval(function(){
+    
+    if (tempInt < tempActInt){
+            console.log("-->Bajar temperatura "+tempActInt);
+            tempActInt--;
+    }else{
+            if (tempInt > tempActInt){
+                console.log("-->Subir temperatura "+tempActInt);
+                tempActInt++;
+            }else{
+                console.log("-->Mantener temperatura "+tempActInt);
+            }            
+    }    
+    },1000);
+}
 
