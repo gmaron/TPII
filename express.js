@@ -19,7 +19,6 @@ var claveAdmin = "1234";
 app.set('view options', { layout: false });
 app.set('view engine', 'ejs');
 
-/* serves main page */
 app.get("/", function (req, res) {
     res.render(appDir + '/inicio.ejs', {errorMessage: "", errorMessageRegister: "", successMessageRegister: ""});        
 });
@@ -64,7 +63,6 @@ app.post("/registro", function (req, res){
     });
 
 app.post("/log", function(req, res) { 
-    // some server side logic 
     recoveryUser(req.body.email,req.body.pass,function (err,content){
     if (err){
         console.log(err);
@@ -105,12 +103,10 @@ app.post("/log", function(req, res) {
             }
         }else{
             res.render(appDir+'/inicio.ejs',{errorMessage:"Usuario/Contrasena invalida",
-                                             errorMessageRegister:"",
-                                             successMessageRegister:""});
+                                             errorMessageRegister:"", successMessageRegister:""});
         }
     }
-    });    
-  });
+}); });
 
 app.post("/historico",function(req,res){
     recoveryAllUsers(function(err,content){
@@ -127,7 +123,8 @@ app.post("/historico",function(req,res){
                 else{
                     var dataObjectAud = [];
                     var dataObjectAudHistorico = [];
-                    for (var i=0; i < content.length; i++){                    
+                    for (var i=0; i < content.length; i++){  
+                        //Historicos
                         if(content[i].fechaSalida != null){
                 dataObjectAudHistorico.push({email:content[i].email,fechaEntrada:content[i].fechaEntrada,fechaSalida:content[i].fechaSalida});  
                         }else{
