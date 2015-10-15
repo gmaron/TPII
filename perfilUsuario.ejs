@@ -75,7 +75,8 @@
                       </tr>
                       <tr>
                         <td>DNI:</td>
-                        <td><%= userDNI %></td>
+                        <td><input type="hidden" name="userDNI"  value="<%= userDNI %>"></input>
+                              <label type="text" name="dni" ><%= userDNI %></label></td>
                       </tr> 
                       <tr>
                         <td>Email:</td>
@@ -86,7 +87,8 @@
                       </tr> 
                       <tr>
                         <td>Contraseña:</td>
-                          <td><label type="text" name="pass" ><%= userPass %></label></td>
+                          <td><input type="hidden" name="pass"  value="<%= userPass %>"></input>
+                              <label type="text" name="password" ><%= userPass %></label></td>
                       </tr>     
                       <tr>
                         <td>Temperatura seleccionada:</td>

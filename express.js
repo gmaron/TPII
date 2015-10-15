@@ -28,7 +28,6 @@ app.post("/registro", function (req, res){
           if(err){
               console.log (err);
           }else{
-            console.log(content);
             if (content !== null){
                 res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"Usuario ya registrado",successMessageRegister:""});        
             }else{
@@ -130,7 +129,6 @@ app.post("/historico",function(req,res){
                         dataObjectAud.push({email:content[i].email,fechaEntrada:content[i].fechaEntrada});
                         }
                     }                    
-                    console.log();
                     res.render(appDir + '/historicoAdministrador.ejs',{data:dataObject,dataAuditoriaHistorico:dataObjectAudHistorico,dataAuditoria:dataObjectAud});
                 }
             });            
@@ -173,9 +171,11 @@ app.post("/modPerfil",function (req,res){
       var regApellido = req.body.ape;
       var regTemp = req.body.temp;
       var regLuz = req.body.luz;
-      var regPass = req.body.pass;
-      recoveryUserByEmail(regEmail,function (err,content){
-          if(err){
+      var regPass = req.body.pass; 
+      var regDNI = req.body.userDNI;
+      console.log (regPass);    
+      recoveryUserByPass(regPass,function (err,content){
+          /*if(err){
               console.log (err);
           }else{
                 var dBid = content[0].id;
@@ -183,7 +183,6 @@ app.post("/modPerfil",function (req,res){
                 var dBpass = content[0].password;                
                 //si el mail no esta en la base de datos o el mail es el mismo que ya tenia
                 if ((content === null)||(content[0].email === regEmail)){
-                    console.log('modifico perfil');
                     updateUserDataBase(regNombre,regApellido,regEmail,regTemp,regLuz,dBid);
                     res.render(appDir+"/perfilUsuario.ejs", {userName:regNombre,
                                                          userSurname:regApellido,
@@ -209,7 +208,101 @@ app.post("/modPerfil",function (req,res){
                                                          userPass: dBpass,
                                                          errorMessageEmail:"El email ya se encuentra registrado"});                      
                 }  
-          }
+          }*/          
+          if (err){
+             console.log (err);            
+          }else{
+            var dBid = content[0].id; //Como recupero por clave, siempre hace referencia al usuario que esta modificando el perfil
+            if (regPass === claveAdmin){
+                if (regEmail === content[0].email){ //Quiere decir que el administrador no cambio el email
+                    updateUserDataBase(regNombre,regApellido,regEmail,regTemp,regLuz,dBid);
+                    res.render(appDir+"/perfilAdministrador.ejs", {userName:regNombre,
+                                                         userSurname:regApellido,
+                                                         userDNI:regDNI,
+                                                         userEmail:regEmail,
+                                                         userTemp: regTemp,
+                                                         userLuz: regLuz,
+                                                         userPass: regPass,
+                                                         errorMessageEmail:""});
+                }else{
+                    recoveryUserByEmail(regEmail,function(err,contentEmail){
+                        if (err){
+                            console.log(err);
+                        }else{
+                            if (content === null){ // no hay nadie con ese email
+                                updateUserDataBase(regNombre,regApellido,regEmail,regTemp,regLuz,dBid);
+                                res.render(appDir+"/perfilAdministrador.ejs", {userName:regNombre,
+                                                         userSurname:regApellido,
+                                                         userDNI:regDNI,
+                                                         userEmail:regEmail,
+                                                         userTemp: regTemp,
+                                                         userLuz: regLuz,
+                                                         userPass: regPass,
+                                                         errorMessageEmail:""});
+                            }else{ //NO CAMBIO NINGUN CAMPO
+                                var dBemail = content[0].email;  
+                                var dBnombre = content[0].nombre;
+                                var dBapellido = content[0].apellido;
+                                var dBtemp = content[0].temp;
+                                var dBluz = content[0].luz;
+                                res.render(appDir+"/perfilAdministrador.ejs", {userName:dBnombre,
+                                                                     userSurname:dBapellido,
+                                                                     userDNI:regDNI,
+                                                                     userEmail:dBemail,
+                                                                     userTemp: dBtemp,
+                                                                     userLuz: dBluz,
+                                                                     userPass: regPass,
+                                                                     errorMessageEmail:"El email ya se encuentra registrado"});
+                            }                        
+                        }                
+                    });                                
+                }                          
+            }else{
+                if (regEmail === content[0].email){ //Quiere decir que el usuario no cambio el email
+                    updateUserDataBase(regNombre,regApellido,regEmail,regTemp,regLuz,dBid);
+                    res.render(appDir+"/perfilUsuario.ejs", {userName:regNombre,
+                                                         userSurname:regApellido,
+                                                         userDNI:regDNI,
+                                                         userEmail:regEmail,
+                                                         userTemp: regTemp,
+                                                         userLuz: regLuz,
+                                                         userPass: regPass,
+                                                         errorMessageEmail:""});
+                }else{
+                    recoveryUserByEmail(regEmail,function(err,contentEmail){
+                        if (err){
+                            console.log(err);
+                        }else{
+                            if (content === null){ // no hay nadie con ese email
+                                updateUserDataBase(regNombre,regApellido,regEmail,regTemp,regLuz,dBid);
+                                res.render(appDir+"/perfilUsuario.ejs", {userName:regNombre,
+                                                         userSurname:regApellido,
+                                                         userDNI:regDNI,
+                                                         userEmail:regEmail,
+                                                         userTemp: regTemp,
+                                                         userLuz: regLuz,
+                                                         userPass: regPass,
+                                                         errorMessageEmail:""});
+                            }else{ //NO CAMBIO NINGUN CAMPO
+                                var dBemail = content[0].email;  
+                                var dBnombre = content[0].nombre;
+                                var dBapellido = content[0].apellido;
+                                var dBtemp = content[0].temp;
+                                var dBluz = content[0].luz;
+                                res.render(appDir+"/perfilUsuario.ejs", {userName:dBnombre,
+                                                                     userSurname:dBapellido,
+                                                                     userDNI:regDNI,
+                                                                     userEmail:dBemail,
+                                                                     userTemp: dBtemp,
+                                                                     userLuz: dBluz,
+                                                                     userPass: regPass,
+                                                                     errorMessageEmail:"El email ya se encuentra registrado"});
+                            }                        
+                        }                
+                    });                                
+                } 
+            }
+          }          
       });   
 });
 
@@ -220,7 +313,7 @@ app.post("/cerrarSesion",function (req,res){
  // serves all the static files 
 app.get(/^(.+)$/, function(req, res){ 
      console.log('static file request : ' + req.params);
-     res.sendfile( __dirname + req.params[0]); 
+     res.sendfile( appDir + req.params[0]); 
  });
  
  
@@ -579,9 +672,7 @@ var serverEmail  = email.server.connect({
 *       ---> nombre: nombre del destinario
 *       ---> pass: contrasena para el destinatario
 */
-function sendEmail(email,nombre,pass){
-    
-    // send the message and get a callback with an error or details of the message that was sent
+function sendEmail(email,nombre,pass){    
     serverEmail.send({
        text:    "Sr/a. "+nombre+" \n \nSu clave de acceso es: "+pass+"\n \nSaludos,\n \nGalileo", 
        from:    "Galileo <ppsgalileo@gmail.com>", 
@@ -589,7 +680,6 @@ function sendEmail(email,nombre,pass){
        //cc:      "else <else@your-email.com>",
        subject: "Clave de acceso - Galileo"
     }, function(err, message) { if (err!=null) console.log(err); });
-
 }
 
 /*
@@ -612,7 +702,6 @@ function getPassword(passConEnter){
         while (passSplit[i] !== 'E'){
             if(parseInt(passSplit[i],10) >= 0 ){
                 pass += passSplit[i];
-                console.log('pass: '+pass);
             }
             i++;
         }
@@ -630,7 +719,7 @@ function getPassword(passConEnter){
 */
 var exec = require('child_process').exec;
 var child;
-var evento = "/dev/input/event1";
+var evento = "/dev/input/event4";
 var ejecutarTeclas = "cd "+appDir+"; ./teclado "+evento;
 child = exec(ejecutarTeclas, function (error, stdout, stderr) {
   console.log('stdout: ' + stdout);
