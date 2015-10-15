@@ -668,8 +668,8 @@ function tempActual (){
 *               --> sino, informa que el usuario no existe
 */
 fs = require('fs');
+var hayUnoAdentro = 0;
 setInterval(function(){
-      
   fs.readFile(appDir+'/teclas.txt', 'utf8', function (err,data) {   
   if (err) {
     return console.log(err);
@@ -700,12 +700,18 @@ setInterval(function(){
                             }
                         }
                         if (registrado === 0){
-                            saveAuditoriaDataBase(dBusr);                                      
-                            console.log("DISFRUTE SU ESTADIA");  
-                            console.log("Ambiente a acondicionar -> Temperatura: "+dBtemp+" Luz:"+dBluz);
-                            simuladorSensores(dBtemp,dBluz);
+                            if (hayUnoAdentro === 0){
+                                saveAuditoriaDataBase(dBusr);
+                                hayUnoAdentro = 1;
+                                console.log("DISFRUTE SU ESTADIA");  
+                                console.log("Ambiente a acondicionar -> Temperatura: "+dBtemp+" Luz:"+dBluz);
+                                simuladorSensores(dBtemp,dBluz);
+                            }else{
+                                console.log("Habitacion ocupada");
+                            }
                         }
                         else{
+                            hayUnoAdentro = 0;
                             clearInterval(intervalSensores);
                             console.log("MUCHAS GRACIAS. VUELVA PRONTOS");
                         }                                                
