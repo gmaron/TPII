@@ -28,7 +28,7 @@ app.post("/registro", function (req, res){
           if(err){
               console.log (err);
           }else{
-            if (content !== null){
+                if (content !== null){
                 res.render(appDir+'/inicio.ejs',{errorMessage:"",errorMessageRegister:"Usuario ya registrado",successMessageRegister:""});        
             }else{
                 recoveryAllUsers(function (err,content){
