@@ -110,7 +110,7 @@
         
         
        <%     
-        for (var i = 0; i < data.length; i++) {         
+        for (var i = 0; i < data.length ; i++) {         
         %>
         <tbody>
         <tr>
@@ -141,7 +141,8 @@
        </tr>
 
        <%     
-        for (var i = 0; i < dataAuditoriaHistorico.length; i++) {         
+        for (var i = (dataAuditoriaHistorico.length-1); i >= 0; i--)
+         {         
         %>
         <tr>
           <td><%= dataAuditoriaHistorico[i].email %></td>

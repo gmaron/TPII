@@ -174,41 +174,7 @@ app.post("/modPerfil",function (req,res){
       var regPass = req.body.pass; 
       var regDNI = req.body.userDNI;
       console.log (regPass);    
-      recoveryUserByPass(regPass,function (err,content){
-          /*if(err){
-              console.log (err);
-          }else{
-                var dBid = content[0].id;
-                var dBDNI = content[0].dni;
-                var dBpass = content[0].password;                
-                //si el mail no esta en la base de datos o el mail es el mismo que ya tenia
-                if ((content === null)||(content[0].email === regEmail)){
-                    updateUserDataBase(regNombre,regApellido,regEmail,regTemp,regLuz,dBid);
-                    res.render(appDir+"/perfilUsuario.ejs", {userName:regNombre,
-                                                         userSurname:regApellido,
-                                                         userDNI:dBDNI,
-                                                         userEmail:regEmail,
-                                                         userTemp: regTemp,
-                                                         userLuz: regLuz,
-                                                         userPass: dBpass,
-                                                         errorMessageEmail:""});
-                }else{
-                    var dBemail = content[0].email;  
-                    var dBnombre = content[0].nombre;
-                    var dBapellido = content[0].apellido;
-                    var dBdni = content[0].dni;
-                    var dBtemp = content[0].temp;
-                    var dBluz = content[0].luz;
-                    res.render(appDir+"/perfilUsuario.ejs", {userName:dBnombre,
-                                                         userSurname:dBapellido,
-                                                         userDNI:dBdni,
-                                                         userEmail:dBemail,
-                                                         userTemp: dBtemp,
-                                                         userLuz: dBluz,
-                                                         userPass: dBpass,
-                                                         errorMessageEmail:"El email ya se encuentra registrado"});                      
-                }  
-          }*/          
+      recoveryUserByPass(regPass,function (err,content){         
           if (err){
              console.log (err);            
           }else{
@@ -327,8 +293,8 @@ app.listen(port, function() {
 /*---------------------------Variables y funciones para la Base de Datos--------------*/
 
 
-var ipDataBase = '192.168.0.13'; 	// ip de la base de datos
-var usrDataBase = 'milton';         // nombre de usuario
+var ipDataBase = '192.168.188.128'; 	// ip de la base de datos
+var usrDataBase = 'root';         // nombre de usuario
 var passDataBase = 'milton';        // contrasena
 var nameDataBase = 'tp2';           // nombre de la base de datos
 
@@ -719,7 +685,7 @@ function getPassword(passConEnter){
 */
 var exec = require('child_process').exec;
 var child;
-var evento = "/dev/input/event4";
+var evento = "/dev/input/event1";
 var ejecutarTeclas = "cd "+appDir+"; ./teclado "+evento;
 child = exec(ejecutarTeclas, function (error, stdout, stderr) {
   console.log('stdout: ' + stdout);
