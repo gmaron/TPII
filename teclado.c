@@ -71,12 +71,7 @@ int main (int argc, char **argv)
     memcpy(result, cwd, len1_cwd);
     memcpy(result+len1_cwd, teclas, len2_teclas+1);//+1 to copy the null-terminator
     
-	archivo = fopen (result,"w");
-	if (archivo == NULL){
-		printf("Error al abrir el archivo");
-		return 1;
-	}
-
+	
 
 #if 0
 	for (i = 0; i < KEY_MAX; i++)
@@ -94,8 +89,18 @@ int main (int argc, char **argv)
         una vez que el usuario termino de realizar el tecleo, limpiar el archivo
         hacer un patron de busqueda para que el javascript lo descifre
     */
+    archivo = fopen (result,"w");
+    if (archivo == NULL){
+        printf("Error al abrir el archivo");
+        return 1;
+    }
+    int modPosArchivo = 1;
 	while (1) {
 
+        if (modPosArchivo == 1){
+            fseek(archivo, 0, SEEK_SET);
+            modPosArchivo = 0;
+        }    
         
             rd = read(fd, ev, sizeof(struct input_event) * 64);
 
@@ -106,15 +111,28 @@ int main (int argc, char **argv)
 
         
             char * tecla;
-            tecla = malloc (3*sizeof(char));
+            tecla = malloc (6*sizeof(char));
             for (i = 0; i < ((rd / sizeof(struct input_event))); i++){
                 if ((ev[i].value == 1)&&(ev[i].code != 0)){
-                        tecla = names[ev[i].type] ? (names[ev[i].type][ev[i].code] ? names[ev[i].type][ev[i].code] : "?") : "?";
-                        printf("---%s---\n", tecla);
+                    tecla = names[ev[i].type] ? (names[ev[i].type][ev[i].code] ? names[ev[i].type][ev[i].code] : "?") : "?";
+			         int ia = (int)tecla[0];
 
+                    //valores entre 0 y 9 en la tabla ASCII -> decimal
+                    if ((ia >= 48)&&(ia <= 57)){
                         fprintf(archivo,tecla);
                         fflush(archivo);
+                        printf("Numero %c : ---%d---\n",tecla[0], ia);
+                    }else{
+                        //es la letra 'E' para el "enter"
+                        printf("Tecla: %s -- Numero: %d\n",tecla,ia);
+                        if (ia == 69){
+                            printf("Enter: %s",tecla);
+                            fprintf(archivo,tecla);
+                            fflush(archivo);
+                            modPosArchivo = 1;
+                        }
                     }
+                }
                 }
         
     }
