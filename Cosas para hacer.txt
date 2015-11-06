@@ -1,0 +1,9 @@
+poner en el display "password: data"
+cuando el chabon se loguea, despues de 10 segundos, poner "ocupado, presione enter para desbloquear"
+cuando esta ocupado, si apreta una tecla, ejemplo "enter" para poner su clave de salida
+
+
+aclarar los problemas de concurrencia entre los archivos
+cambios en el .C
+
+	
