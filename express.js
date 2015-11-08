@@ -5,9 +5,7 @@ var app = express();
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extend:true
-}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 var path = require('path');
 var appDir = path.dirname(require.main.filename);
