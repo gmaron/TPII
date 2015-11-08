@@ -15,6 +15,7 @@ var appDir = path.dirname(require.main.filename);
 var emailAdmin = "ppsgalileo@gmail.com";
 var claveAdmin = "1234";
 
+
 app.set('view options', { layout: false });
 app.set('view engine', 'ejs');
 
