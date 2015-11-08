@@ -127,21 +127,6 @@ app.get("/", function (req, res) {
         
     });
     
-    
-    
-    /*request(dirMusic+"damePlaylist?num=12", function(error, response, body) {
-        recBodyCanciones(body);
-        //cancionesPlayList += response.body;   
-        //console.log("response.body: "+response.body);
-
-    });
-    request(dirMusic+"dameNombrePlaylist?num=12", function(error, response, body) {
-        nombrePlaylist = body;
-    });
-    console.log("playlist: -"+nombrePlaylist+"-");
-    console.log("canciones: "+cancionesPlayList);
-    res.render(appDir + '/inicio.ejs', {errorMessage: "", errorMessageRegister: "", successMessageRegister: "",namePlaylist:nombrePlaylist,cancionesPlaylist:cancionesPlayList});        
-    */
 });
 
 
