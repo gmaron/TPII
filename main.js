@@ -18,7 +18,103 @@ var claveAdmin = "1234";
 app.set('view options', { layout: false });
 app.set('view engine', 'ejs');
 
+var request = require("request");
+var portMusic = "8000";
+var ipMusic = "192.168.0.10";
+var dirMusic = "http://"+ipMusic+":"+portMusic+"/";
 
+var cancionesPlayList0 = "";
+var cancionesPlayList1 = "";
+var cancionesPlayList2 = "";
+
+var nombrePlaylist0 = "";
+var nombrePlaylist1 = "";
+var nombrePlaylist2 = "";
+
+var Sequence =  require('sequence').Sequence;
+var sequence = Sequence.create();
+
+
+app.get("/", function (req, res) {
+    
+    
+    var dbNumPlay0 = "9";
+    var dbNumPlay1 = "3";
+    var dbNumPlay2 = "10";
+    
+    sequence.then(function(next){
+        setTimeout(function(){
+            request(dirMusic+"damePlaylist?num="+dbNumPlay0, function(error, response, body) {
+                cancionesPlayList0 = body;
+            });    
+            next();
+        },100);
+    })
+    .then(function(next){
+        setTimeout(function(){
+           request(dirMusic+"dameNombrePlaylist?num="+dbNumPlay0, function(error, response, body) {
+                nombrePlaylist0 = body;
+            });    
+            next();
+        },100);
+    })
+    .then(function(next){
+        setTimeout(function(){
+            request(dirMusic+"damePlaylist?num="+dbNumPlay1, function(error, response, body) {
+                cancionesPlayList1 = body;
+            });    
+            next();
+        },100);
+    })
+    .then(function(next){
+        setTimeout(function(){
+           request(dirMusic+"dameNombrePlaylist?num="+dbNumPlay1, function(error, response, body) {
+                nombrePlaylist1 = body;
+            });    
+            next();
+        },100);
+    })
+    .then(function(next){
+        setTimeout(function(){
+            request(dirMusic+"damePlaylist?num="+dbNumPlay2, function(error, response, body) {
+                cancionesPlayList2 = body;
+            });    
+            next();
+        },100);
+    })
+    .then(function(next){
+        setTimeout(function(){
+           request(dirMusic+"dameNombrePlaylist?num="+dbNumPlay2, function(error, response, body) {
+                nombrePlaylist2 = body;
+            });    
+            next();
+        },100);
+    })
+    .then(function(next){
+        setTimeout(function(){
+            res.render(appDir + '/inicio.ejs', {errorMessage: "", 
+                                                errorMessageRegister: "",
+                                                successMessageRegister:"",
+                                                namePlaylist0:nombrePlaylist0,
+                                                cancionesPlaylist0:cancionesPlayList0,
+                                                indexPlaylist0:dbNumPlay0,
+                                                namePlaylist1:nombrePlaylist1,
+                                                cancionesPlaylist1:cancionesPlayList1,
+                                                indexPlaylist1:dbNumPlay1,
+                                                namePlaylist2:nombrePlaylist2,
+                                                cancionesPlaylist2:cancionesPlayList2,
+                                                indexPlaylist2:dbNumPlay2
+                                               });    
+        next();
+        },100);
+        
+    });
+    
+    
+    //res.render(appDir + '/inicio.ejs', {errorMessage: "", errorMessageRegister: "", successMessageRegister: ""});        
+    
+    
+});
 
 app.post("/registro", function (req, res){
       var regEmail = req.body.email;
