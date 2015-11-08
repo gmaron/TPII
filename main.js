@@ -111,9 +111,6 @@ app.get("/", function (req, res) {
     });
     
     
-    //res.render(appDir + '/inicio.ejs', {errorMessage: "", errorMessageRegister: "", successMessageRegister: ""});        
-    
-    
 });
 
 app.post("/registro", function (req, res){
